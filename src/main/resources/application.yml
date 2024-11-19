@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/recipe_app
+    username: turayevhasan
+    password: 2003
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  mail:
+    host: 'smtp.gmail.com'
+    port: 587
+    username: 'turayevhasan2003@gmail.com'
+    password: 'tiii chrr wrtz tnak'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
