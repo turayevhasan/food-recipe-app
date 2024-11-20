@@ -10,7 +10,7 @@ public interface UserMapper {
                 .id(user.getId())
                 .email(user.getEmail())
                 .role(user.getRole().getName())
-                .photoPath(user.getPhotoPath())
+                .photoPath(null)
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

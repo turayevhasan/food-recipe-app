@@ -11,7 +11,9 @@ import lombok.Setter;
 @Setter
 public class SignUpReq {
     @NotBlank
-    @Pattern(regexp = "^\\w*?[a-zA-Z]\\w+@[a-z\\d\\-]+(\\.[a-z\\d\\-]+)*\\.[a-z]+\\z")
+    private String fullName;
+
+    @NotBlank
     private String email;
 
     @NotBlank

@@ -1,5 +1,6 @@
 package uz.pdp.food_recipe_app.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -16,5 +17,6 @@ import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 @Entity
 @Table(name = "auth_role")
 public class Role extends BaseTimeLong {
+    @Column(nullable = false, unique = true)
     private String name;
 }

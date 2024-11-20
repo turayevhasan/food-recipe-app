@@ -33,7 +33,7 @@ public class MailService {
                             overflow: hidden;
                         }
                         .header {
-                            background-color: #4CAF50;
+                            background-color: #4B9CD3;
                             color: white;
                             text-align: center;
                             padding: 20px;
@@ -43,7 +43,7 @@ public class MailService {
                             text-align: left;
                         }
                         .footer {
-                            background-color: #f4f4f4;
+                            background-color: #E1EBEE;
                             color: #777;
                             text-align: center;
                             padding: 15px;
@@ -53,6 +53,41 @@ public class MailService {
                             color: #4CAF50;
                             text-decoration: none;
                         }
+                        .form-group {
+                            margin-bottom: 15px;
+                        }
+                        label {
+                            display: block;
+                            margin-bottom: 5px;
+                            font-weight: bold;
+                        }
+                        .email-password{
+                                    width: 100%%;
+                                    padding: 10px;
+                                    font-size: 14px;
+                                    border: 1px solid #ccc;
+                                    border-radius: 4px;
+                                    box-sizing: border-box;
+                        }
+                          .form-text {
+                                    font-size: 12px;
+                                    color: #6c757d;
+                                }
+                                .btn-primary {
+                                    background-color: #007bff;
+                                    color: white;
+                                    padding: 10px 15px;
+                                    border: none;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                    font-size: 14px;
+                                    display: block; /* Block-level element */
+                                    margin: 20px auto; /* Center the button */
+                                }
+                                .btn-primary:hover {
+                                    background-color: #0056b3;
+                                }
+              
                     </style>
                 </head>
                 <body>
@@ -64,7 +99,7 @@ public class MailService {
                             <p>%s</p>
                         </div>
                         <div class="footer">
-                            <p>© 2024 Food Recipe App.</p>
+                            <p><b>© 2024 Food Recipe App.</b></p>
                         </div>
                     </div>
                 </body>

@@ -6,4 +6,5 @@ public interface BaseURI {
     String AUTH = "/auth";
     String CATEGORY = "/category";
     String COMMENT = "/comment";
+    String USER = "/user";
 }

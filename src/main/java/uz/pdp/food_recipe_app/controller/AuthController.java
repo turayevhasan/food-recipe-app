@@ -25,9 +25,11 @@ public class AuthController {
         return ApiResult.successResponse(authService.signUp(req));
     }
 
-    @GetMapping( "/activate/{email}")
-    public ApiResult<ResBaseMsg> verificationEmail(@PathVariable String email) {
-        return ApiResult.successResponse(authService.verifyEmail(email));
+    @GetMapping("/verify-account")
+    public ApiResult<ResBaseMsg> verification(
+            @RequestParam("email") String email,
+            @RequestParam("code") String code) {
+        return ApiResult.successResponse(authService.verifyAccount(email, code));
     }
 
     @PostMapping("/sign-in")
@@ -35,7 +37,7 @@ public class AuthController {
         return ApiResult.successResponse(authService.signIn(req));
     }
 
-    @GetMapping("/token-refresh")
+    @GetMapping("/refresh-token")
     ApiResult<TokenDto> refreshToken(@Valid @RequestBody RefreshTokenReq req) {
         return ApiResult.successResponse(authService.refreshToken(req));
     }

@@ -30,11 +30,11 @@ public class UserRes {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FormatPatterns.DATE_TIME_FORMAT)
     private LocalDateTime updatedAt;
 
-    public UserRes(User user) {
+    public UserRes(User user, String path) {
         this.id = user.getId();
         this.email = user.getEmail();
         this.role = user.getRole().getName();
-        this.photoPath = user.getPhotoPath();
+        this.photoPath = path;
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
         this.active = user.isActive();
