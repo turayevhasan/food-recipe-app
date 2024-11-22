@@ -10,11 +10,11 @@ import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "passwords")
-public class Password extends BaseTimeLong {
+@Table(name = "code")
+public class Code extends BaseTimeLong{
     @Column(nullable = false)
     private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private User user;
+    @Column(nullable = false)
+    private String email;
 }

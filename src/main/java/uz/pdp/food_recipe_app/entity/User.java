@@ -38,16 +38,7 @@ public class User extends BaseTimeUUID {
     private UserStatus status = UserStatus.INACTIVE;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Password> passwords;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Recipe> recipes;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Follower> followers;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Following> followings;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Review> reviews;

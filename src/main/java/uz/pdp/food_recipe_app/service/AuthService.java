@@ -1,7 +1,6 @@
 package uz.pdp.food_recipe_app.service;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,22 +9,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.config.UserPrincipal;
 import uz.pdp.food_recipe_app.config.jwt.JwtTokenProvider;
-import uz.pdp.food_recipe_app.entity.Password;
 import uz.pdp.food_recipe_app.entity.Role;
 import uz.pdp.food_recipe_app.entity.User;
-import uz.pdp.food_recipe_app.enums.ErrorTypeEnum;
 import uz.pdp.food_recipe_app.enums.RoleEnum;
 import uz.pdp.food_recipe_app.enums.UserStatus;
 import uz.pdp.food_recipe_app.exceptions.RestException;
 import uz.pdp.food_recipe_app.payload.auth.req.RefreshTokenReq;
 import uz.pdp.food_recipe_app.payload.auth.req.SignInReq;
 import uz.pdp.food_recipe_app.payload.auth.req.SignUpReq;
+import uz.pdp.food_recipe_app.payload.auth.req.VerifyAccountReq;
 import uz.pdp.food_recipe_app.payload.auth.res.SignInRes;
 import uz.pdp.food_recipe_app.payload.auth.res.TokenDto;
 import uz.pdp.food_recipe_app.payload.auth.res.UserRes;
 import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
 import uz.pdp.food_recipe_app.repository.AttachmentRepository;
-import uz.pdp.food_recipe_app.repository.PasswordRepository;
 import uz.pdp.food_recipe_app.repository.RoleRepository;
 import uz.pdp.food_recipe_app.repository.UserRepository;
 import uz.pdp.food_recipe_app.util.BaseConstants;
@@ -45,8 +42,7 @@ public class AuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordService passwordService;
-    private final PasswordRepository passwordRepository;
+    private final CodeService codeService;
     private final AttachmentRepository attachmentRepository;
 
     public ResBaseMsg signUp(SignUpReq req) {
@@ -71,12 +67,9 @@ public class AuthService {
 
         userRepository.save(user);
 
-        try {
-            String code = passwordService.generatePassword(user);
-            mailService.sendMessage(user.getEmail(), code, "Your Confirmation Code", "Complete Registration");
-        } catch (MessagingException e) {
-            throw RestException.restThrow(EMAIL_NOT_VALID);
-        }
+        String code = codeService.generateCode(req.getEmail());
+        String body = String.format("<p class=\"code\">%s</p>", code);
+        mailService.sendMessage(user.getEmail(), body, "Registration Confirmation Code", "Complete Registration");
 
         return new ResBaseMsg("Success! Account confirmation code sent to your Email!");
     }
@@ -124,7 +117,6 @@ public class AuthService {
             throw RestException.restThrow(WRONG_ACCESS_TOKEN);
         }
         throw RestException.restThrow(ACCESS_TOKEN_NOT_EXPIRED);
-
     }
 
     private static String getTokenWithOutBearer(String token) {
@@ -141,7 +133,6 @@ public class AuthService {
                     .getFilePath();
 
         UserRes userRes = new UserRes(user, path);
-
         return new SignInRes(userRes, generateTokens(user));
     }
 
@@ -159,21 +150,14 @@ public class AuthService {
                 .build();
     }
 
-    public ResBaseMsg verifyAccount(String email, String code) {
-        User user = userRepository.findByEmail(email)
+    public ResBaseMsg verifyAccount(VerifyAccountReq req) {
+        User user = userRepository.findByEmail(req.getEmail())
                 .orElseThrow(RestException.thew(USER_NOT_FOUND));
 
         if (user.isActive())
             return new ResBaseMsg("User Already Verified!");
 
-        Password password = passwordRepository.findByUserEmailAndDeleted(email, false)
-                .orElseThrow(RestException.thew(VERIFICATION_PASSWORD_NOT_FOUND));
-
-        if (!password.getCode().equals(code))
-            throw RestException.restThrow(PASSWORD_NOT_MATCH);
-
-        password.setDeleted(true);
-        passwordRepository.save(password);
+        codeService.checkVerify(req.getEmail(), req.getCode());
 
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);

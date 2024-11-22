@@ -10,7 +10,7 @@ import uz.pdp.food_recipe_app.payload.mail.SendEmailDto;
 public class MailService {
     private final MailSenderService mailSenderService;
 
-    public void sendMessage(String email, String body, String title, String subject) throws MessagingException {
+    public void sendMessage(String email, String body, String title, String subject) {
         String htmlContent = """
                 <!DOCTYPE html>
                 <html lang="en">
@@ -40,10 +40,10 @@ public class MailService {
                         }
                         .content {
                             padding: 30px;
-                            text-align: left;
+                            text-align: center;
                         }
                         .footer {
-                            background-color: #E1EBEE;
+                            background-color: #f1f1f1;
                             color: #777;
                             text-align: center;
                             padding: 15px;
@@ -53,50 +53,25 @@ public class MailService {
                             color: #4CAF50;
                             text-decoration: none;
                         }
-                        .form-group {
-                            margin-bottom: 15px;
-                        }
-                        label {
-                            display: block;
-                            margin-bottom: 5px;
+                        .code {
+                            font-size: 24px;
                             font-weight: bold;
+                            color: #333;
+                            background-color: #f1f1f1;
+                            padding: 10px 20px;
+                            border-radius: 4px;
+                            margin: 20px auto;
+                            display: inline-block;
                         }
-                        .email-password{
-                                    width: 100%%;
-                                    padding: 10px;
-                                    font-size: 14px;
-                                    border: 1px solid #ccc;
-                                    border-radius: 4px;
-                                    box-sizing: border-box;
-                        }
-                          .form-text {
-                                    font-size: 12px;
-                                    color: #6c757d;
-                                }
-                                .btn-primary {
-                                    background-color: #007bff;
-                                    color: white;
-                                    padding: 10px 15px;
-                                    border: none;
-                                    border-radius: 4px;
-                                    cursor: pointer;
-                                    font-size: 14px;
-                                    display: block; /* Block-level element */
-                                    margin: 20px auto; /* Center the button */
-                                }
-                                .btn-primary:hover {
-                                    background-color: #0056b3;
-                                }
-              
                     </style>
                 </head>
                 <body>
                     <div class="container">
                         <div class="header">
-                            <h1>%s</h1>
+                            <h2>%s</h2>
                         </div>
                         <div class="content">
-                            <p>%s</p>
+                         %s
                         </div>
                         <div class="footer">
                             <p><b>© 2024 Food Recipe App.</b></p>
@@ -106,12 +81,18 @@ public class MailService {
                 </html>
                 """.formatted(title, body);
 
+        System.out.println(htmlContent);
+
         SendEmailDto sendEmailDto = SendEmailDto.builder()
                 .to(email)
                 .subject(subject)
                 .body(htmlContent)
                 .html(true)
                 .build();
-        mailSenderService.send(sendEmailDto);
+        try {
+            mailSenderService.send(sendEmailDto);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
