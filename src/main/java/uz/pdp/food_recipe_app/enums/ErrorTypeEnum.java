@@ -27,7 +27,9 @@ public enum ErrorTypeEnum {
     PHONE_NUMBER_NOT_VALID,
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND),
     CONFIRM_PASSWORD_NOT_MATCH,
-    USER_NOT_ACTIVATED;
+    USER_NOT_ACTIVATED,
+    CODE_NOT_FOUND(HttpStatus.NOT_FOUND),
+    INPUT_CODE_NOT_MATCH;
 
     private HttpStatus status = HttpStatus.BAD_REQUEST;
 

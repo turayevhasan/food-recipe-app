@@ -1,9 +1,6 @@
 package uz.pdp.food_recipe_app.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 
@@ -15,9 +12,9 @@ import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 @Entity
 @Table(name = "follower")
 public class Follower extends BaseTimeLong {
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     private User follower;
 }
