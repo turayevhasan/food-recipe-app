@@ -7,4 +7,7 @@ public interface BaseURI {
     String CATEGORY = "/category";
     String COMMENT = "/comment";
     String USER = "/user";
+    String NOTIFICATION = "/notification";
+    String FOLLOWING = "/following";
+    String FOLLOWER = "/follower";
 }
