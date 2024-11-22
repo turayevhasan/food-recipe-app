@@ -1,13 +1,13 @@
 package uz.pdp.food_recipe_app.service;
 
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.entity.User;
 import uz.pdp.food_recipe_app.enums.ErrorTypeEnum;
 import uz.pdp.food_recipe_app.exceptions.RestException;
-import uz.pdp.food_recipe_app.payload.ConfirmPasswordReq;
+import uz.pdp.food_recipe_app.payload.ResetPasswordReq;
+import uz.pdp.food_recipe_app.payload.UpdatePasswordReq;
 import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
 import uz.pdp.food_recipe_app.repository.UserRepository;
 import uz.pdp.food_recipe_app.util.GlobalVar;
@@ -16,62 +16,52 @@ import uz.pdp.food_recipe_app.util.GlobalVar;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordService passwordService;
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
+    private final CodeService codeService;
 
-    public ResBaseMsg sendResetPassword(String email) {
-        if (!userRepository.existsByEmail(email))
-            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND);
-
-        String body = """
-                <form action="http://localhost:8080/api/v1/user/forgot-password" method="POST">
-                  <div class="form-group">
-                     <label for="email">Email address</label>
-                     <input type="email" id="email" aria-describedby="emailHelp">
-                     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                  </div>
-                  <div class="form-group">
-                     <label for="password">New Password</label>
-                     <input type="password" id="password">
-                  </div>
-                  <div class="form-group">
-                     <label for="passwordConfirm">Confirm Password</label>
-                     <input type="password" id="passwordConfirm">
-                  </div>
-                  <button type="submit" class="btn-primary">Submit</button>
-                </form>
-                """;
-
-        try {
-            mailService.sendMessage(email, body, "Change Your Password", "Forgot Password");
-        } catch (MessagingException e) {
-            throw RestException.restThrow(ErrorTypeEnum.EMAIL_NOT_VALID);
-        }
-
-        return new ResBaseMsg("We have sent link to reset your password!");
-    }
-
-    public ResBaseMsg forgotPassword(ConfirmPasswordReq req) {
-        User user = userRepository.findByEmail(req.getEmail())
+    public ResBaseMsg forgotPassword(String email) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.USER_NOT_FOUND));
 
-        if (!req.getPassword().equals(req.getConfirmPassword()))
+        if (!user.isActive())
+            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_ACTIVATED);
+
+        String code = codeService.generateCode(email);
+        String body = String.format("<p class=\"code\">%s</p>", code);
+        mailService.sendMessage(email, body, "Receive Your Code", "Forgot Password");
+
+        return new ResBaseMsg("We will sent a code to your email. Please enter that code");
+    }
+
+    public ResBaseMsg changePassword(UpdatePasswordReq req) {
+        if (GlobalVar.getUser() == null)
+            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
+
+        if (!req.getNewPassword().equals(req.getConfirmNewPassword()))
             throw RestException.restThrow(ErrorTypeEnum.CONFIRM_PASSWORD_NOT_MATCH);
 
-        user.setPassword(passwordEncoder.encode(req.getPassword()));
-        userRepository.save(user); //updated
+        GlobalVar.getUser().setPassword(passwordEncoder.encode(req.getNewPassword()));
+        userRepository.save(GlobalVar.getUser()); //updated
 
         return new ResBaseMsg("Successfully updated your password!");
     }
 
-    public ResBaseMsg changePassword(String password, String confirmPassword) {
-        if (!password.equals(confirmPassword))
+    public ResBaseMsg resetPassword(ResetPasswordReq req) {
+        User user = userRepository.findByEmail(req.getEmail())
+                .orElseThrow(RestException.thew(ErrorTypeEnum.USER_NOT_FOUND));
+
+        if (!user.isActive())
+            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_ACTIVATED);
+
+        if (!req.getNewPassword().equals(req.getConfirmNewPassword()))
             throw RestException.restThrow(ErrorTypeEnum.CONFIRM_PASSWORD_NOT_MATCH);
 
-        GlobalVar.getUser().setPassword(passwordEncoder.encode(password));
-        userRepository.save(GlobalVar.getUser());
+        codeService.checkVerify(req.getEmail(), req.getCode()); //checking
 
-        return new ResBaseMsg("Successfully changed your password!");
+        user.setPassword(passwordEncoder.encode(req.getNewPassword()));
+        userRepository.save(user); //updated
+
+        return new ResBaseMsg("Successfully updated your password!");
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.pdp.food_recipe_app.payload.auth.req.RefreshTokenReq;
 import uz.pdp.food_recipe_app.payload.auth.req.SignInReq;
 import uz.pdp.food_recipe_app.payload.auth.req.SignUpReq;
+import uz.pdp.food_recipe_app.payload.auth.req.VerifyAccountReq;
 import uz.pdp.food_recipe_app.payload.auth.res.SignInRes;
 import uz.pdp.food_recipe_app.payload.auth.res.TokenDto;
 import uz.pdp.food_recipe_app.payload.base.ApiResult;
@@ -25,11 +26,9 @@ public class AuthController {
         return ApiResult.successResponse(authService.signUp(req));
     }
 
-    @GetMapping("/verify-account")
-    public ApiResult<ResBaseMsg> verification(
-            @RequestParam("email") String email,
-            @RequestParam("code") String code) {
-        return ApiResult.successResponse(authService.verifyAccount(email, code));
+    @PostMapping("/verify-account")
+    public ApiResult<ResBaseMsg> verification(@RequestBody @Valid VerifyAccountReq req) {
+        return ApiResult.successResponse(authService.verifyAccount(req));
     }
 
     @PostMapping("/sign-in")

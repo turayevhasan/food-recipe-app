@@ -29,14 +29,7 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(User user) {
-        return generateToken(new HashMap<>(), user);
-    }
-
-    public String generateToken(
-            Map<String, Object> extraClaims,
-            User user
-    ) {
-        return buildToken(extraClaims, user, BaseConstants.ACCESS_TOKEN_EXPIRE);
+        return buildToken(new HashMap<>(), user, BaseConstants.ACCESS_TOKEN_EXPIRE);
     }
 
     public String generateRefreshToken(User user) {
