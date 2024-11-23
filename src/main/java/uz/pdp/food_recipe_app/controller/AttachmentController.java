@@ -20,7 +20,7 @@ import java.util.UUID;
 public class AttachmentController {
     private final AttachmentService service;
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(
             value = "/upload",
             produces = MediaType.APPLICATION_JSON_VALUE,

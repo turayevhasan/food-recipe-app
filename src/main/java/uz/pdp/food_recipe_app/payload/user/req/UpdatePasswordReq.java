@@ -1,17 +1,11 @@
-package uz.pdp.food_recipe_app.payload;
+package uz.pdp.food_recipe_app.payload.user.req;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class ResetPasswordReq {
-    @NotBlank
-    private String email;
-
-    @NotBlank
-    private String code;
-
+public class UpdatePasswordReq {
     @NotBlank
     @Size(min = 6, max = 20)
     private String newPassword;

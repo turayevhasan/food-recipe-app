@@ -1,4 +1,4 @@
-package uz.pdp.food_recipe_app.payload.notification.res;
+package uz.pdp.food_recipe_app.payload.procedure.res;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -7,22 +7,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uz.pdp.food_recipe_app.entity.User;
 import uz.pdp.food_recipe_app.util.FormatPatterns;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-public class NotificationRes {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ProcedureRes {
     private Long id;
-    private String title;
     private String text;
-    private Boolean read;
-    private Long recipeId;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FormatPatterns.DATE_TIME_FORMAT)
