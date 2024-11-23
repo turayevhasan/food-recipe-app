@@ -20,21 +20,25 @@ import java.util.List;
 public class RecipeController {
     private final RecipeService recipeService;
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/add")
     public ApiResult<RecipeRes> addRecipe(@RequestBody @Valid RecipeAddReq req) {
         return ApiResult.successResponse(recipeService.add(req));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/update/{id}")
     public ApiResult<RecipeRes> updateRecipe(@PathVariable("id") long id, @RequestBody RecipeUpdateReq req){
         return ApiResult.successResponse(recipeService.update(id, req));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/get/{id}")
     public ApiResult<RecipeRes> getRecipe(@PathVariable("id") long id){
         return ApiResult.successResponse(recipeService.getOne(id));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/get-all")
     public ApiResult<List<RecipeRes>> filterRecipe(
             @RequestParam(defaultValue = "0") int page,

@@ -9,10 +9,10 @@ import java.util.UUID;
 
 @Repository
 public interface FollowRepository extends JpaRepository<Following, Long> {
-    List<Following> findAllByFollowingId(UUID following_id);
-    List<Following> findAllByUserId(UUID User_id);
-    void deleteAllByFollowingId(UUID following_id);
-    void deleteAllByUserId(UUID User_id);
-    Boolean existsByFollowingId(UUID following_id);
-    Boolean existsByUserId(UUID User_id);
+    List<Following> findAllByFollowingId(UUID followingId);
+    List<Following> findAllByUserId(UUID userId);
+    void deleteAllByFollowingId(UUID followingId);
+    void deleteAllByUserId(UUID userId);
+    Boolean existsByFollowingId(UUID followingId);
+    Boolean existsByUserId(UUID userId);
 }

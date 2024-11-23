@@ -17,11 +17,13 @@ import java.util.List;
 public class NotificationController {
     private final NotificationService notificationService;
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/update/{id}")
     public ApiResult<NotificationRes> updateCategory(@PathVariable("id") long id, @RequestBody NotificationUpdateReq req){
         return ApiResult.successResponse(notificationService.update(id, req));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/get/{id}")
     public ApiResult<NotificationRes> getCategory(@PathVariable("id") long id){
         return ApiResult.successResponse(notificationService.getOne(id));

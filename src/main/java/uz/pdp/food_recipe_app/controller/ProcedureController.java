@@ -2,6 +2,7 @@ package uz.pdp.food_recipe_app.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.food_recipe_app.payload.base.ApiResult;
 import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
@@ -19,22 +20,26 @@ import java.util.List;
 public class ProcedureController {
     private final ProcedureService procedureService;
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/add")
     public ApiResult<ResBaseMsg> addProcedure(@RequestParam @Valid ProcedureAddReq req) {
         return ApiResult.successResponse(procedureService.add(req));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/get/{id}")
     public ApiResult<ProcedureRes> getProcedure(@PathVariable("id") long id) {
         return ApiResult.successResponse(procedureService.getOne(id));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/update/{id}")
     public ApiResult<ProcedureRes> update(@PathVariable("id") long id, @RequestBody ProcedureUpdateReq req){
         return ApiResult.successResponse(procedureService.update(id, req));
     }
 
     //get all recipe's procedures
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/get-all/{recipeId}")
     public ApiResult<List<ProcedureRes>> getAllProcedure(@PathVariable("recipeId") long recipeId) {
         return ApiResult.successResponse(procedureService.getAll(recipeId));

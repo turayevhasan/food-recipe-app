@@ -56,5 +56,4 @@ public class User extends BaseTimeUUID {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Notification> notifications;
-
 }

@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @AllArgsConstructor
