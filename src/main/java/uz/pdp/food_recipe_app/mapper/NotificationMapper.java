@@ -25,6 +25,5 @@ public interface NotificationMapper {
         notification.setRead(getIfExists(req.getRead(), notification.getRead()));
         notification.setTitle(getIfExists(req.getTitle(), notification.getTitle()));
         notification.setText(getIfExists(req.getText(), notification.getText()));
-        notification.setRecipeId(getIfExists(req.getRecipeId(), notification.getRecipeId()));
     }
 }

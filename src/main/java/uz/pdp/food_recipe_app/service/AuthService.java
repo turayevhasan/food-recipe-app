@@ -14,13 +14,14 @@ import uz.pdp.food_recipe_app.entity.User;
 import uz.pdp.food_recipe_app.enums.RoleEnum;
 import uz.pdp.food_recipe_app.enums.UserStatus;
 import uz.pdp.food_recipe_app.exceptions.RestException;
+import uz.pdp.food_recipe_app.mapper.UserMapper;
 import uz.pdp.food_recipe_app.payload.auth.req.RefreshTokenReq;
 import uz.pdp.food_recipe_app.payload.auth.req.SignInReq;
 import uz.pdp.food_recipe_app.payload.auth.req.SignUpReq;
 import uz.pdp.food_recipe_app.payload.auth.req.VerifyAccountReq;
 import uz.pdp.food_recipe_app.payload.auth.res.SignInRes;
 import uz.pdp.food_recipe_app.payload.auth.res.TokenDto;
-import uz.pdp.food_recipe_app.payload.auth.res.UserRes;
+import uz.pdp.food_recipe_app.payload.user.res.UserRes;
 import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
 import uz.pdp.food_recipe_app.repository.AttachmentRepository;
 import uz.pdp.food_recipe_app.repository.RoleRepository;
@@ -132,7 +133,7 @@ public class AuthService {
                     .orElseThrow(RestException.thew(FILE_NOT_FOUND))
                     .getFilePath();
 
-        UserRes userRes = new UserRes(user, path);
+        UserRes userRes = UserMapper.entityToRes(user, path);
         return new SignInRes(userRes, generateTokens(user));
     }
 

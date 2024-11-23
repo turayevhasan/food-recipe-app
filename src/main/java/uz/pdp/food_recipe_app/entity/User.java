@@ -13,8 +13,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "auth_user")
 @Entity
+@Table(name = "auth_user")
 public class User extends BaseTimeUUID {
     @Column(nullable = false)
     private String fullName;
@@ -24,6 +24,8 @@ public class User extends BaseTimeUUID {
 
     @Column(nullable = false)
     private String password;
+
+    private String country;
 
     private String bio;
 
@@ -37,6 +39,12 @@ public class User extends BaseTimeUUID {
     @Builder.Default
     private UserStatus status = UserStatus.INACTIVE;
 
+    public boolean isActive() {
+        return this.status == UserStatus.ACTIVE;
+    }
+
+    ////////////////////////////////////////////////////
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Recipe> recipes;
 
@@ -49,7 +57,4 @@ public class User extends BaseTimeUUID {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Notification> notifications;
 
-    public boolean isActive() {
-        return this.status == UserStatus.ACTIVE;
-    }
 }

@@ -23,7 +23,7 @@ public class Notification extends BaseTimeLong {
     @Column(nullable = false)
     private String text;
 
-    private UUID recipeId;
+    private Long recipeId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;

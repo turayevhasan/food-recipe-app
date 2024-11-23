@@ -20,6 +20,7 @@ public enum ErrorTypeEnum {
     PASSWORD_NOT_MATCH,
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND),
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND),
+    VIDEO_NOT_FOUND(HttpStatus.NOT_FOUND),
     FILE_CANNOT_DELETED,
     ERROR_SAVING_FILE,
     EMAIL_NOT_VALID,
@@ -30,7 +31,10 @@ public enum ErrorTypeEnum {
     CONFIRM_PASSWORD_NOT_MATCH,
     USER_NOT_ACTIVATED,
     CODE_NOT_FOUND(HttpStatus.NOT_FOUND),
-    INPUT_CODE_NOT_MATCH;
+    INPUT_CODE_NOT_MATCH,
+    RECIPE_NOT_FOUND(HttpStatus.NOT_FOUND),
+    INGREDIENT_NOT_FOUND(HttpStatus.NOT_FOUND),
+    PROCEDURE_NOT_FOUND(HttpStatus.NOT_FOUND);
 
     private HttpStatus status = HttpStatus.BAD_REQUEST;
 

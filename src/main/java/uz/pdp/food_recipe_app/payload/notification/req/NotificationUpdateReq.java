@@ -15,5 +15,5 @@ public class NotificationUpdateReq {
     private Boolean read;
     private String title;
     private String text;
-    private UUID recipeId;
+    private Long recipeId;
 }
