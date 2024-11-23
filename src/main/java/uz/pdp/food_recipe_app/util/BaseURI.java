@@ -10,4 +10,5 @@ public interface BaseURI {
     String NOTIFICATION = "/notification";
     String FOLLOWING = "/following";
     String FOLLOWER = "/follower";
+    String REVIEW = "/review";
 }
