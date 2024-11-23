@@ -22,7 +22,7 @@ public class ProcedureController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/add")
-    public ApiResult<ResBaseMsg> addProcedure(@RequestParam @Valid ProcedureAddReq req) {
+    public ApiResult<ResBaseMsg> addProcedure(@RequestBody @Valid ProcedureAddReq req) {
         return ApiResult.successResponse(procedureService.add(req));
     }
 
@@ -36,6 +36,11 @@ public class ProcedureController {
     @PutMapping("/update/{id}")
     public ApiResult<ProcedureRes> update(@PathVariable("id") long id, @RequestBody ProcedureUpdateReq req){
         return ApiResult.successResponse(procedureService.update(id, req));
+    }
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/delete/{id}")
+    public ApiResult<ResBaseMsg> delete(@PathVariable("id") long id) {
+        return ApiResult.successResponse(procedureService.delete(id));
     }
 
     //get all recipe's procedures

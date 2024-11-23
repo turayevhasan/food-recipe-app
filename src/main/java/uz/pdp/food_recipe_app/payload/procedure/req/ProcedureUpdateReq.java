@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class ProcedureUpdateReq {
     private String text;
-    private Long targetId;
+    private Long targetProcedureId;
 }

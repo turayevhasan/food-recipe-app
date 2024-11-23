@@ -14,7 +14,9 @@ import uz.pdp.food_recipe_app.repository.RecipeRepository;
 import uz.pdp.food_recipe_app.repository.ReviewRepository;
 import uz.pdp.food_recipe_app.util.GlobalVar;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +61,6 @@ public class ReviewService {
                 .orElseThrow(RestException.thew(ErrorTypeEnum.REVIEW_NOT_FOUND));
 
         review.setDeleted(true);
-
         reviewRepository.save(review);
 
         return new ResBaseMsg("Review successfully deleted!");
@@ -69,8 +70,7 @@ public class ReviewService {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.RECIPE_NOT_FOUND));
 
-        return recipe.getReviews()
-                .stream()
+        return recipe.getReviews().stream()
                 .map(ReviewMapper::entityToDto)
                 .toList();
     }

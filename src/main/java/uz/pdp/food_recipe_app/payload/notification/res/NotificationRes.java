@@ -23,6 +23,7 @@ public class NotificationRes {
     private String text;
     private Boolean read;
     private Long recipeId;
+    private boolean deleted;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FormatPatterns.DATE_TIME_FORMAT)

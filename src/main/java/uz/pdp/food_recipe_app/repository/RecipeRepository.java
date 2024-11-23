@@ -12,8 +12,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query("""
                 SELECT r FROM Recipe r
                 LEFT JOIN r.category c
-                WHERE (:name IS NULL OR LOWER(r.name) LIKE LOWER(CONCAT('%', :name, '%')))
-                  AND (:category IS NULL OR c.name = :category)
+                WHERE (:name IS NULL OR :name = '' OR LOWER(CAST(r.name AS string)) LIKE LOWER(CONCAT('%', :name, '%')))
+                  AND (:categoryId IS NULL OR c.id = :categoryId)
                   AND (:rate IS NULL OR (SELECT AVG(rt.stars) FROM Rating rt WHERE rt.recipe.id = r.id) = :rate)
                 ORDER BY
                   CASE WHEN :timeType = 'NEWEST' THEN r.createdAt END DESC,
@@ -26,8 +26,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             """)
     List<Recipe> findAllByFilters(
             @Param("name") String name,
-            @Param("category") String category,
+            @Param("categoryId") Long categoryId,
             @Param("rate") Integer rate,
             @Param("timeType") String timeType,
             Pageable pageable);
+
 }

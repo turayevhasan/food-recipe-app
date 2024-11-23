@@ -5,7 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.food_recipe_app.payload.base.ApiResult;
 import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
-import uz.pdp.food_recipe_app.payload.saved.res.SavedRes;
+import uz.pdp.food_recipe_app.payload.saved.SavedRes;
 import uz.pdp.food_recipe_app.service.SavedService;
 import uz.pdp.food_recipe_app.util.BaseURI;
 

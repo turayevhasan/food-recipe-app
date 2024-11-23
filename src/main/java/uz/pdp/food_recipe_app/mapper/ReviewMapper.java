@@ -8,6 +8,7 @@ public interface ReviewMapper {
         return ReviewRes.builder()
                 .id(review.getId())
                 .text(review.getText())
+                .deleted(review.isDeleted())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
                 .build();

@@ -1,7 +1,7 @@
 package uz.pdp.food_recipe_app.mapper;
 
 import uz.pdp.food_recipe_app.entity.Saved;
-import uz.pdp.food_recipe_app.payload.saved.res.SavedRes;
+import uz.pdp.food_recipe_app.payload.saved.SavedRes;
 
 public interface SavedMapper {
     static SavedRes entityToRes(Saved saved) {

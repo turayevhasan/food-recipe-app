@@ -38,10 +38,9 @@ public class AttachmentController {
         return service.download(id, view);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping( "/delete/{id}")
     public ApiResult<ResBaseMsg> deleteFile(@PathVariable UUID id){
         return ApiResult.successResponse(service.delete(id));
     }
-
 }

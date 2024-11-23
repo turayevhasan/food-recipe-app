@@ -16,7 +16,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findByName(String name);
 
-    @Query("select c from Category c where (:name is null or lower(c.name) like lower(concat('%', :name, '%'))) ")
+    @Query("select c from Category c where (:name = '' or :name is null or lower(c.name) like lower(concat('%', :name, '%')))")
     Page<Category> findAllByFilters(
             @Param("name") String name,
             Pageable pageable

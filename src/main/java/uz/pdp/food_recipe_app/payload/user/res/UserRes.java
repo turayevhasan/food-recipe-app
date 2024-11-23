@@ -22,6 +22,7 @@ public class UserRes {
     private String country;
     private String photoPath;
     private boolean active;
+    private boolean deleted;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FormatPatterns.DATE_TIME_FORMAT)

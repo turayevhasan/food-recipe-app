@@ -49,10 +49,10 @@ public class ProcedureService {
             procedure.setText(req.getText());
         }
 
-        if (req.getTargetId() != null) {
+        if (req.getTargetProcedureId() != null) {
             String text = procedure.getText();
 
-            Procedure targetProcedure = procedureRepository.findById(id)
+            Procedure targetProcedure = procedureRepository.findById(req.getTargetProcedureId())
                     .orElseThrow(RestException.thew(ErrorTypeEnum.PROCEDURE_NOT_FOUND));
 
             procedure.setText(targetProcedure.getText());
@@ -70,5 +70,10 @@ public class ProcedureService {
         return recipe.getProcedures().stream()
                 .map(ProcedureMapper::entityToRes)
                 .toList();
+    }
+
+    public ResBaseMsg delete(long id) {
+        procedureRepository.deleteById(id);//deleting
+        return new ResBaseMsg("Procedure deleted!");
     }
 }

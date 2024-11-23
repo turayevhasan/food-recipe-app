@@ -14,6 +14,7 @@ public interface NotificationMapper {
                 .text(notification.getText())
                 .read(notification.getRead())
                 .recipeId(notification.getRecipeId())
+                .deleted(notification.isDeleted())
                 .createdAt(notification.getCreatedAt())
                 .updatedAt(notification.getUpdatedAt())
                 .build();

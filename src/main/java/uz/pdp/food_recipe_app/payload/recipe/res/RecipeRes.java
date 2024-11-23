@@ -20,6 +20,7 @@ public class RecipeRes {
     private Long id;
     private String name;
     private UUID videoId;
+    private boolean deleted;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FormatPatterns.DATE_TIME_FORMAT)
