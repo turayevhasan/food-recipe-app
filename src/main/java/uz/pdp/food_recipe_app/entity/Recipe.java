@@ -25,9 +25,7 @@ public class Recipe extends BaseTimeLong {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
-
-    @Column(nullable = false)
-    private String country;
+    //////////////////////////////////////////////////////
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipe")
     private List<Procedure> procedures;
