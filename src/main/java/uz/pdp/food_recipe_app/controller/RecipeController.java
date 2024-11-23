@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.food_recipe_app.enums.TimeType;
+import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
 import uz.pdp.food_recipe_app.payload.recipe.req.RecipeAddReq;
 import uz.pdp.food_recipe_app.payload.recipe.res.RecipeRes;
 import uz.pdp.food_recipe_app.payload.recipe.req.RecipeUpdateReq;
@@ -38,16 +39,23 @@ public class RecipeController {
         return ApiResult.successResponse(recipeService.getOne(id));
     }
 
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/delete/{id}")
+    public ApiResult<ResBaseMsg> deleteRecipe(@PathVariable("id") long id){
+        return ApiResult.successResponse(recipeService.delete(id));
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/get-all")
     public ApiResult<List<RecipeRes>> filterRecipe(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) TimeType timeType,
-            @RequestParam(required = false) int rate,
-            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Integer rate,
+            @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String name){
-        return ApiResult.successResponse(recipeService.getAll(page, size, name, timeType, rate, category));
+        return ApiResult.successResponse(recipeService.getAll(page, size, name, timeType, rate, categoryId));
     }
 
     @PreAuthorize("isAuthenticated()")

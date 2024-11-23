@@ -1,4 +1,4 @@
-package uz.pdp.food_recipe_app.payload.saved.res;
+package uz.pdp.food_recipe_app.payload.saved;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
@@ -13,9 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SavedRes {
-
     private Long id;
-
     private RecipeRes recipe;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FormatPatterns.DATE_TIME_FORMAT)

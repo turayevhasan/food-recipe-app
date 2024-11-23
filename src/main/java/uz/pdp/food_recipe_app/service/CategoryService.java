@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.entity.Attachment;
 import uz.pdp.food_recipe_app.entity.User;
+import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
 import uz.pdp.food_recipe_app.repository.AttachmentRepository;
 import uz.pdp.food_recipe_app.repository.CategoryRepository;
 import uz.pdp.food_recipe_app.entity.Category;
@@ -84,5 +85,15 @@ public class CategoryService {
                 .findById(category.getPhotoId())
                 .map(Attachment::getFilePath)
                 .orElse(null);
+    }
+
+    public ResBaseMsg delete(long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(RestException.thew(ErrorTypeEnum.CATEGORY_NOT_FOUND));
+
+        category.setDeleted(true);
+        categoryRepository.save(category);//saved
+
+        return new ResBaseMsg("Category deleted!");
     }
 }

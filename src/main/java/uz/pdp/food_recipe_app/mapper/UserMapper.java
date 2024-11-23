@@ -16,6 +16,7 @@ public interface UserMapper {
                 .photoPath(path)
                 .country(user.getCountry())
                 .active(user.isActive())
+                .deleted(user.isDeleted())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

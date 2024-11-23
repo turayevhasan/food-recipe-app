@@ -8,7 +8,7 @@ import uz.pdp.food_recipe_app.enums.ErrorTypeEnum;
 import uz.pdp.food_recipe_app.exceptions.RestException;
 import uz.pdp.food_recipe_app.mapper.SavedMapper;
 import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
-import uz.pdp.food_recipe_app.payload.saved.res.SavedRes;
+import uz.pdp.food_recipe_app.payload.saved.SavedRes;
 import uz.pdp.food_recipe_app.repository.RecipeRepository;
 import uz.pdp.food_recipe_app.repository.SavedRepository;
 import uz.pdp.food_recipe_app.util.GlobalVar;

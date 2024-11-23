@@ -11,6 +11,7 @@ import uz.pdp.food_recipe_app.enums.ErrorTypeEnum;
 import uz.pdp.food_recipe_app.enums.TimeType;
 import uz.pdp.food_recipe_app.exceptions.RestException;
 import uz.pdp.food_recipe_app.mapper.RecipeMapper;
+import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
 import uz.pdp.food_recipe_app.payload.recipe.req.RecipeAddReq;
 import uz.pdp.food_recipe_app.payload.recipe.res.RecipeRes;
 import uz.pdp.food_recipe_app.payload.recipe.req.RecipeUpdateReq;
@@ -83,12 +84,12 @@ public class RecipeService {
         return RecipeMapper.entityToRes(recipe);
     }
 
-    public List<RecipeRes> getAll(int page, int size, String name, TimeType timeType, int rate, String category) {
+    public List<RecipeRes> getAll(int page, int size, String name, TimeType timeType, Integer rate, Long categoryId) {
         Pageable pageable = PageRequest.of(page, size);
 
         String timeTypeStr = timeType != null ? timeType.name() : "ALL";
 
-        return recipeRepository.findAllByFilters(name, category, rate, timeTypeStr, pageable)
+        return recipeRepository.findAllByFilters(name, categoryId, rate, timeTypeStr, pageable)
                 .stream()
                 .map(RecipeMapper::entityToRes)
                 .toList();
@@ -104,5 +105,15 @@ public class RecipeService {
         return user.getRecipes().stream()
                 .map(RecipeMapper::entityToRes)
                 .toList();
+    }
+
+    public ResBaseMsg delete(long id) {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(RestException.thew(ErrorTypeEnum.RECIPE_NOT_FOUND));
+
+        recipe.setDeleted(true);
+        recipeRepository.save(recipe); //saved
+
+        return new ResBaseMsg("Recipe deleted!");
     }
 }
