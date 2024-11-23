@@ -8,4 +8,8 @@ public interface BaseURI {
     String USER = "/user";
     String NOTIFICATION = "/notification";
     String FOLLOW = "/follow";
+    String REVIEW = "/review";
+    String INGREDIENT = "/ingredient";
+    String PROCEDURE = "/procedure";
+    String RECIPE = "/recipe";
 }
