@@ -12,4 +12,5 @@ public interface BaseURI {
     String INGREDIENT = "/ingredient";
     String PROCEDURE = "/procedure";
     String RECIPE = "/recipe";
+    String SAVED = "/saved";
 }
