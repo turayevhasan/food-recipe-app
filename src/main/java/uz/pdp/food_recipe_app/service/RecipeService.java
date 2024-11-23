@@ -14,10 +14,7 @@ import uz.pdp.food_recipe_app.mapper.RecipeMapper;
 import uz.pdp.food_recipe_app.payload.recipe.req.RecipeAddReq;
 import uz.pdp.food_recipe_app.payload.recipe.res.RecipeRes;
 import uz.pdp.food_recipe_app.payload.recipe.req.RecipeUpdateReq;
-import uz.pdp.food_recipe_app.repository.AttachmentRepository;
-import uz.pdp.food_recipe_app.repository.CategoryRepository;
-import uz.pdp.food_recipe_app.repository.RecipeRepository;
-import uz.pdp.food_recipe_app.repository.UserRepository;
+import uz.pdp.food_recipe_app.repository.*;
 import uz.pdp.food_recipe_app.util.GlobalVar;
 
 import java.util.List;
@@ -29,6 +26,7 @@ public class RecipeService {
     private final CategoryRepository categoryRepository;
     private final AttachmentRepository attachmentRepository;
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
 
     public RecipeRes add(RecipeAddReq req) {
         Category category = categoryRepository.findById(req.getCategoryId())
@@ -48,7 +46,6 @@ public class RecipeService {
                 .build();
 
         recipeRepository.save(recipe); //saving
-
         return RecipeMapper.entityToRes(recipe);
     }
 

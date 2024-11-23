@@ -1,8 +1,11 @@
 package uz.pdp.food_recipe_app.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.entity.Notification;
+import uz.pdp.food_recipe_app.entity.Recipe;
 import uz.pdp.food_recipe_app.entity.User;
 import uz.pdp.food_recipe_app.enums.ErrorTypeEnum;
 import uz.pdp.food_recipe_app.exceptions.RestException;
@@ -14,12 +17,29 @@ import uz.pdp.food_recipe_app.repository.RecipeRepository;
 import uz.pdp.food_recipe_app.util.GlobalVar;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@EnableAsync
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final RecipeRepository recipeRepository;
+
+
+    @Async
+    public void addRecipeNotification(Recipe recipe) {
+        //todo
+        Notification notification = Notification.builder()
+                .title("New Recipe Alert!")
+                .text(recipe.getName())
+                .recipeId(recipe.getId())
+                .read(false)
+                .user(null)
+                .build();
+
+        notificationRepository.save(notification);
+    }
 
     public NotificationRes update(long id, NotificationUpdateReq req) {
         Notification notification = notificationRepository.findById(id)
