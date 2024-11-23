@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.config.UserPrincipal;
 import uz.pdp.food_recipe_app.config.jwt.JwtTokenProvider;
+import uz.pdp.food_recipe_app.entity.Attachment;
 import uz.pdp.food_recipe_app.entity.Role;
 import uz.pdp.food_recipe_app.entity.User;
 import uz.pdp.food_recipe_app.enums.RoleEnum;
@@ -127,14 +128,17 @@ public class AuthService {
     }
 
     private SignInRes generateSignInRes(User user) {
-        String path = null;
-        if (user.getPhotoId() != null)
-            path = attachmentRepository.findById(user.getPhotoId())
-                    .orElseThrow(RestException.thew(FILE_NOT_FOUND))
-                    .getFilePath();
-
-        UserRes userRes = UserMapper.entityToRes(user, path);
+        UserRes userRes = UserMapper.entityToRes(user, getPhotoPath(user));
         return new SignInRes(userRes, generateTokens(user));
+    }
+    private String getPhotoPath(User user) {
+        if (user.getPhotoId() == null)
+            return null;
+
+        return attachmentRepository
+                .findById(user.getPhotoId())
+                .map(Attachment::getFilePath)
+                .orElse(null);
     }
 
     private TokenDto generateTokens(User user) {
