@@ -34,7 +34,8 @@ public enum ErrorTypeEnum {
     INPUT_CODE_NOT_MATCH,
     RECIPE_NOT_FOUND(HttpStatus.NOT_FOUND),
     INGREDIENT_NOT_FOUND(HttpStatus.NOT_FOUND),
-    PROCEDURE_NOT_FOUND(HttpStatus.NOT_FOUND);
+    PROCEDURE_NOT_FOUND(HttpStatus.NOT_FOUND),
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND);
 
     private HttpStatus status = HttpStatus.BAD_REQUEST;
 
