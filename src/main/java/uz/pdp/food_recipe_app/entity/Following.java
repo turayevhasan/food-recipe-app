@@ -10,7 +10,7 @@ import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "following")
+@Table(name = "following", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "following_id"}))
 public class Following extends BaseTimeLong {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     private User user;

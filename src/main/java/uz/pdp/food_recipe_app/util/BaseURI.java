@@ -8,9 +8,5 @@ public interface BaseURI {
     String COMMENT = "/comment";
     String USER = "/user";
     String NOTIFICATION = "/notification";
-    String FOLLOWING = "/following";
-    String FOLLOWER = "/follower";
-    String RECIPE = "/recipe";
-    String INGREDIENT = "/ingredient";
-    String PROCEDURE = "/procedure";
+    String FOLLOW = "/follow";
 }
