@@ -41,14 +41,16 @@ public class UserService {
     }
 
     public ResBaseMsg changePassword(UpdatePasswordReq req) {
-        if (GlobalVar.getUser() == null)
+        User user = GlobalVar.getUser();
+
+        if (user == null)
             throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
 
         if (!req.getNewPassword().equals(req.getConfirmNewPassword()))
             throw RestException.restThrow(ErrorTypeEnum.CONFIRM_PASSWORD_NOT_MATCH);
 
-        GlobalVar.getUser().setPassword(passwordEncoder.encode(req.getNewPassword()));
-        userRepository.save(GlobalVar.getUser()); //updated
+        user.setPassword(passwordEncoder.encode(req.getNewPassword()));
+        userRepository.save(user); //updated
 
         return new ResBaseMsg("Successfully updated your password!");
     }
@@ -75,14 +77,20 @@ public class UserService {
         if (GlobalVar.getUser() == null)
             throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
 
-        Attachment photo = attachmentRepository.findById(req.getPhotoId())
-                .orElseThrow(RestException.thew(ErrorTypeEnum.FILE_NOT_FOUND));
-
         User user = GlobalVar.getUser();
         UserMapper.update(user, req); //updating
+        userRepository.save(user); //saved
 
-        userRepository.save(user);
+        return UserMapper.entityToRes(user, getPhotoPath(user));
+    }
 
-        return UserMapper.entityToRes(user, photo.getFilePath());
+    private String getPhotoPath(User user) {
+        if (user.getPhotoId() == null)
+            return null;
+
+        return attachmentRepository
+                .findById(user.getPhotoId())
+                .map(Attachment::getFilePath)
+                .orElse(null);
     }
 }
