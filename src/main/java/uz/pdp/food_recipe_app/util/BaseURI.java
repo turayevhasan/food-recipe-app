@@ -5,7 +5,6 @@ public interface BaseURI {
     String FILE = "/file";
     String AUTH = "/auth";
     String CATEGORY = "/category";
-    String COMMENT = "/comment";
     String USER = "/user";
     String NOTIFICATION = "/notification";
     String FOLLOW = "/follow";
