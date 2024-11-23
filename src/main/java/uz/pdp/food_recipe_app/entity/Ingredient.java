@@ -17,12 +17,11 @@ public class Ingredient extends BaseTimeLong {
     @Column(nullable = false)
     private String name;
 
-    private UUID photo;
+    private UUID photoId;
 
     @Column(nullable = false)
     private Double weight;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Recipe recipe;
-
 }

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface CodeRepository extends JpaRepository<Code, Long> {
-    boolean existsByEmail(String email);
     List<Code> findAllByEmailAndDeleted(String email, boolean deleted);
     Optional<Code> findFirstByEmailAndDeleted(String email, boolean deleted);
 }
