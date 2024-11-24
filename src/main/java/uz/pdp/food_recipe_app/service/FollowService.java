@@ -58,7 +58,7 @@ public class FollowService {
     }
 
     public ResBaseMsg deleteFollowing(UUID id) {
-        if(followRepository.existsByUserId(id)) {
+        if(!followRepository.existsByUserId(id)) {
             return new ResBaseMsg("this following user does not exist");
         }
         followRepository.deleteAllByUserId(id);
@@ -66,7 +66,7 @@ public class FollowService {
     }
 
     public ResBaseMsg deleteFollower(UUID id) {
-        if(followRepository.existsByUserId(id)) {
+        if(!followRepository.existsByUserId(id)) {
             return new ResBaseMsg("this follower user does not exist");
         }
         followRepository.deleteAllByFollowingId(id);

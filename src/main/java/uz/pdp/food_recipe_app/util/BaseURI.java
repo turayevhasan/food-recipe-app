@@ -9,4 +9,5 @@ public interface BaseURI {
     String USER = "/user";
     String NOTIFICATION = "/notification";
     String FOLLOW = "/follow";
+    String LIKE = "/like";
 }
