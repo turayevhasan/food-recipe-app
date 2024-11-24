@@ -5,6 +5,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.entity.Attachment;
+import uz.pdp.food_recipe_app.entity.User;
+import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
 import uz.pdp.food_recipe_app.repository.AttachmentRepository;
 import uz.pdp.food_recipe_app.repository.CategoryRepository;
 import uz.pdp.food_recipe_app.entity.Category;
@@ -30,7 +33,9 @@ public class CategoryService {
         if (categoryRepository.existsByName(req.getName()))
             throw RestException.restThrow(ErrorTypeEnum.CATEGORY_ALREADY_EXISTS);
 
-        String photoPath = getPhotoPath(req.getPhotoId());
+        String photoPath = attachmentRepository.findById(req.getPhotoId())
+                .orElseThrow(RestException.thew(ErrorTypeEnum.FILE_NOT_FOUND))
+                .getFilePath();
 
         Category category = new Category(req.getName(), req.getPhotoId());
         categoryRepository.save(category);  //saving
@@ -53,14 +58,14 @@ public class CategoryService {
         }
         categoryRepository.save(category); //updating
 
-        return CategoryMapper.entityToDto(category, getPhotoPath(category.getPhotoId()));
+        return CategoryMapper.entityToDto(category, getPhotoPath(category));
     }
 
     public CategoryRes getOne(long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.CATEGORY_NOT_FOUND));
 
-        return CategoryMapper.entityToDto(category, getPhotoPath(category.getPhotoId()));
+        return CategoryMapper.entityToDto(category, getPhotoPath(category));
     }
 
     public List<CategoryRes> getAll(int page, int size, String name) {
@@ -68,17 +73,27 @@ public class CategoryService {
 
         return categoryRepository.findAllByFilters(name, pageable)
                 .stream()
-                .map(this::mapToDto)
+                .map(category -> CategoryMapper.entityToDto(category, getPhotoPath(category)))
                 .toList();
     }
 
-    private CategoryRes mapToDto(Category category) {
-        return CategoryMapper.entityToDto(category, getPhotoPath(category.getPhotoId()));
+    private String getPhotoPath(Category category) {
+        if (category.getPhotoId() == null)
+            return null;
+
+        return attachmentRepository
+                .findById(category.getPhotoId())
+                .map(Attachment::getFilePath)
+                .orElse(null);
     }
 
-    private String getPhotoPath(UUID photoId) {
-        return attachmentRepository.findById(photoId)
-                .orElseThrow(RestException.thew(ErrorTypeEnum.FILE_NOT_FOUND))
-                .getFilePath();
+    public ResBaseMsg delete(long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(RestException.thew(ErrorTypeEnum.CATEGORY_NOT_FOUND));
+
+        category.setDeleted(true);
+        categoryRepository.save(category);//saved
+
+        return new ResBaseMsg("Category deleted!");
     }
 }

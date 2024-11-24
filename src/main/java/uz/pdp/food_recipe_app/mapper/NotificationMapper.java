@@ -14,7 +14,7 @@ public interface NotificationMapper {
                 .text(notification.getText())
                 .read(notification.getRead())
                 .recipeId(notification.getRecipeId())
-                .user(notification.getUser())
+                .deleted(notification.isDeleted())
                 .createdAt(notification.getCreatedAt())
                 .updatedAt(notification.getUpdatedAt())
                 .build();
@@ -25,6 +25,5 @@ public interface NotificationMapper {
         notification.setRead(getIfExists(req.getRead(), notification.getRead()));
         notification.setTitle(getIfExists(req.getTitle(), notification.getTitle()));
         notification.setText(getIfExists(req.getText(), notification.getText()));
-        notification.setRecipeId(getIfExists(req.getRecipeId(), notification.getRecipeId()));
     }
 }

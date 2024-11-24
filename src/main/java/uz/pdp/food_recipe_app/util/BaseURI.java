@@ -5,9 +5,13 @@ public interface BaseURI {
     String FILE = "/file";
     String AUTH = "/auth";
     String CATEGORY = "/category";
-    String COMMENT = "/comment";
     String USER = "/user";
     String NOTIFICATION = "/notification";
     String FOLLOW = "/follow";
-    String LIKE = "/like";
+    String REVIEW = "/review";
+    String INGREDIENT = "/ingredient";
+    String PROCEDURE = "/procedure";
+    String RECIPE = "/recipe";
+    String SAVED = "/saved";
+    String VIDEO = "/video";
 }

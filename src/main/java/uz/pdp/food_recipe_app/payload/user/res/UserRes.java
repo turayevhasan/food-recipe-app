@@ -1,4 +1,4 @@
-package uz.pdp.food_recipe_app.payload.auth.res;
+package uz.pdp.food_recipe_app.payload.user.res;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -19,8 +19,10 @@ public class UserRes {
     private UUID id;
     private String email;
     private String role;
+    private String country;
     private String photoPath;
     private boolean active;
+    private boolean deleted;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FormatPatterns.DATE_TIME_FORMAT)
@@ -29,14 +31,4 @@ public class UserRes {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FormatPatterns.DATE_TIME_FORMAT)
     private LocalDateTime updatedAt;
-
-    public UserRes(User user, String path) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.role = user.getRole().getName();
-        this.photoPath = path;
-        this.createdAt = user.getCreatedAt();
-        this.updatedAt = user.getUpdatedAt();
-        this.active = user.isActive();
-    }
 }

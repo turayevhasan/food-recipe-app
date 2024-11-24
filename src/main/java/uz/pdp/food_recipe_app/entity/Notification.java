@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,7 +21,7 @@ public class Notification extends BaseTimeLong {
     @Column(nullable = false)
     private String text;
 
-    private UUID recipeId;
+    private Long recipeId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;

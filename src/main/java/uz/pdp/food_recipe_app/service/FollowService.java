@@ -2,6 +2,7 @@ package uz.pdp.food_recipe_app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.entity.Attachment;
 import uz.pdp.food_recipe_app.entity.Following;
 import uz.pdp.food_recipe_app.entity.User;
 import uz.pdp.food_recipe_app.enums.ErrorTypeEnum;
@@ -70,6 +71,16 @@ public class FollowService {
             return new ResBaseMsg("this follower user does not exist");
         }
         followRepository.deleteAllByFollowingId(id);
-        return new ResBaseMsg("successfully deleted following user");
+        return new ResBaseMsg("Successfully deleted following user");
+    }
+
+    private String getPhotoPath(User user) {
+        if (user.getPhotoId() == null)
+            return null;
+
+        return attachmentRepository
+                .findById(user.getPhotoId())
+                .map(Attachment::getFilePath)
+                .orElse(null);
     }
 }

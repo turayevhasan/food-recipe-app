@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/recipe_app
-    username: postgres
-    password:
+    username: turayevhasan
+    password: 2003
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

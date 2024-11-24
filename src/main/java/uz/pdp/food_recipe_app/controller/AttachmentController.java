@@ -20,7 +20,7 @@ import java.util.UUID;
 public class AttachmentController {
     private final AttachmentService service;
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(
             value = "/upload",
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -38,10 +38,9 @@ public class AttachmentController {
         return service.download(id, view);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping( "/delete/{id}")
     public ApiResult<ResBaseMsg> deleteFile(@PathVariable UUID id){
         return ApiResult.successResponse(service.delete(id));
     }
-
 }

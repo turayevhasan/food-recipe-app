@@ -3,12 +3,17 @@ package uz.pdp.food_recipe_app.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.entity.Attachment;
 import uz.pdp.food_recipe_app.entity.User;
 import uz.pdp.food_recipe_app.enums.ErrorTypeEnum;
 import uz.pdp.food_recipe_app.exceptions.RestException;
-import uz.pdp.food_recipe_app.payload.ResetPasswordReq;
-import uz.pdp.food_recipe_app.payload.UpdatePasswordReq;
+import uz.pdp.food_recipe_app.mapper.UserMapper;
+import uz.pdp.food_recipe_app.payload.user.req.ProfileUpdateReq;
+import uz.pdp.food_recipe_app.payload.user.req.ResetPasswordReq;
+import uz.pdp.food_recipe_app.payload.user.req.UpdatePasswordReq;
 import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
+import uz.pdp.food_recipe_app.payload.user.res.UserRes;
+import uz.pdp.food_recipe_app.repository.AttachmentRepository;
 import uz.pdp.food_recipe_app.repository.UserRepository;
 import uz.pdp.food_recipe_app.util.GlobalVar;
 
@@ -19,6 +24,7 @@ public class UserService {
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
     private final CodeService codeService;
+    private final AttachmentRepository attachmentRepository;
 
     public ResBaseMsg forgotPassword(String email) {
         User user = userRepository.findByEmail(email)
@@ -35,14 +41,16 @@ public class UserService {
     }
 
     public ResBaseMsg changePassword(UpdatePasswordReq req) {
-        if (GlobalVar.getUser() == null)
+        User user = GlobalVar.getUser();
+
+        if (user == null)
             throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
 
         if (!req.getNewPassword().equals(req.getConfirmNewPassword()))
             throw RestException.restThrow(ErrorTypeEnum.CONFIRM_PASSWORD_NOT_MATCH);
 
-        GlobalVar.getUser().setPassword(passwordEncoder.encode(req.getNewPassword()));
-        userRepository.save(GlobalVar.getUser()); //updated
+        user.setPassword(passwordEncoder.encode(req.getNewPassword()));
+        userRepository.save(user); //updated
 
         return new ResBaseMsg("Successfully updated your password!");
     }
@@ -63,5 +71,26 @@ public class UserService {
         userRepository.save(user); //updated
 
         return new ResBaseMsg("Successfully updated your password!");
+    }
+
+    public UserRes update(ProfileUpdateReq req) {
+        if (GlobalVar.getUser() == null)
+            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
+
+        User user = GlobalVar.getUser();
+        UserMapper.update(user, req); //updating
+        userRepository.save(user); //saved
+
+        return UserMapper.entityToRes(user, getPhotoPath(user));
+    }
+
+    private String getPhotoPath(User user) {
+        if (user.getPhotoId() == null)
+            return null;
+
+        return attachmentRepository
+                .findById(user.getPhotoId())
+                .map(Attachment::getFilePath)
+                .orElse(null);
     }
 }

@@ -10,6 +10,7 @@ public interface CategoryMapper {
                 .id(category.getId())
                 .name(category.getName())
                 .photoPath(photoPath)
+                .deleted(category.isDeleted())
                 .createdAt(category.getCreatedAt())
                 .updatedAt(category.getUpdatedAt())
                 .build();
