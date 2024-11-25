@@ -53,19 +53,22 @@ public class CategoryService {
 
         category.setName(getIfExists(req.getName(), category.getName()));
 
-        if (req.getPhotoId() != null && attachmentRepository.existsById(req.getPhotoId())) {
+        if (req.getPhotoId() != null) {
+            if (!attachmentRepository.existsById(req.getPhotoId())) {
+                throw RestException.restThrow(ErrorTypeEnum.FILE_NOT_FOUND);
+            }
             category.setPhotoId(req.getPhotoId());
         }
         categoryRepository.save(category); //updating
 
-        return CategoryMapper.entityToDto(category, getPhotoPath(category));
+        return CategoryMapper.entityToDto(category, getPhotoPath(category.getPhotoId()));
     }
 
     public CategoryRes getOne(long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.CATEGORY_NOT_FOUND));
 
-        return CategoryMapper.entityToDto(category, getPhotoPath(category));
+        return CategoryMapper.entityToDto(category, getPhotoPath(category.getPhotoId()));
     }
 
     public List<CategoryRes> getAll(int page, int size, String name) {
@@ -73,16 +76,16 @@ public class CategoryService {
 
         return categoryRepository.findAllByFilters(name, pageable)
                 .stream()
-                .map(category -> CategoryMapper.entityToDto(category, getPhotoPath(category)))
+                .map(category -> CategoryMapper.entityToDto(category, getPhotoPath(category.getPhotoId())))
                 .toList();
     }
 
-    private String getPhotoPath(Category category) {
-        if (category.getPhotoId() == null)
+    private String getPhotoPath(UUID photoId) {
+        if (photoId == null)
             return null;
 
         return attachmentRepository
-                .findById(category.getPhotoId())
+                .findById(photoId)
                 .map(Attachment::getFilePath)
                 .orElse(null);
     }

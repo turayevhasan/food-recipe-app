@@ -75,6 +75,7 @@ public class FollowService {
         followRepository.deleteById(following.getId());
         return new ResBaseMsg("successfully deleted following user");
     }
+
     @Transactional
     public ResBaseMsg deleteFollower(UUID id) {
         User user = GlobalVar.getUser();

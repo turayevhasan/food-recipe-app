@@ -1,5 +1,6 @@
 package uz.pdp.food_recipe_app.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,6 +29,7 @@ import static uz.pdp.food_recipe_app.enums.ErrorTypeEnum.*;
 public class AttachmentService {
     private final AttachmentRepository attachmentRepository;
 
+    @Transactional
     public FileRes upload(MultipartFile file) {
         if (file == null || file.isEmpty())
             throw RestException.restThrow(FILE_NOT_FOUND);

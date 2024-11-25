@@ -78,6 +78,13 @@ public class UserService {
             throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
 
         User user = GlobalVar.getUser();
+
+        if (req.getPhotoId() != null) {
+            if (!attachmentRepository.existsById(req.getPhotoId())) {
+                throw RestException.restThrow(ErrorTypeEnum.FILE_NOT_FOUND);
+            }
+            user.setPhotoId(req.getPhotoId());
+        }
         UserMapper.update(user, req); //updating
         userRepository.save(user); //saved
 
