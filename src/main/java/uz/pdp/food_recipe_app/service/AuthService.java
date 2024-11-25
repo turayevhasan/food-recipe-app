@@ -43,7 +43,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider   jwtTokenProvider;
     private final CodeService codeService;
     private final AttachmentRepository attachmentRepository;
 
