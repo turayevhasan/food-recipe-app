@@ -14,4 +14,5 @@ public interface BaseURI {
     String RECIPE = "/recipe";
     String SAVED = "/saved";
     String VIDEO = "/video";
+    String RATING = "/rating";
 }
