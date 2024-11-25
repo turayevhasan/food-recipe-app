@@ -19,20 +19,20 @@ public class NotificationController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/update/{id}")
-    public ApiResult<NotificationRes> updateCategory(@PathVariable("id") long id, @RequestBody NotificationUpdateReq req){
+    public ApiResult<NotificationRes> updateNotification(@PathVariable("id") long id, @RequestBody NotificationUpdateReq req){
         return ApiResult.successResponse(notificationService.update(id, req));
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/get/{id}")
-    public ApiResult<NotificationRes> getCategory(@PathVariable("id") long id){
+    public ApiResult<NotificationRes> getNotification(@PathVariable("id") long id){
         return ApiResult.successResponse(notificationService.getOne(id));
     }
 
     //get my notifications
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/get-all")
-    public ApiResult<List<NotificationRes>> getAllCategory(@RequestParam(required = false) Boolean read){
+    public ApiResult<List<NotificationRes>> getAllNotification(@RequestParam(required = false) Boolean read){
         return ApiResult.successResponse(notificationService.getAll(read));
     }
 }
