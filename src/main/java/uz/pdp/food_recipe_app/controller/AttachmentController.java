@@ -30,7 +30,6 @@ public class AttachmentController {
         return ApiResult.successResponse(service.upload(file));
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/download/{id}")
     public ResponseEntity<?> download(
             @PathVariable UUID id,
@@ -42,5 +41,11 @@ public class AttachmentController {
     @DeleteMapping( "/delete/{id}")
     public ApiResult<ResBaseMsg> deleteFile(@PathVariable UUID id){
         return ApiResult.successResponse(service.delete(id));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping( "/delete/{filePath}")
+    public ApiResult<ResBaseMsg> deleteFile(@PathVariable("filePath") String filePath){
+        return ApiResult.successResponse(service.deleteByPath(filePath));
     }
 }

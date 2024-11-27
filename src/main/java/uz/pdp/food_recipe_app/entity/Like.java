@@ -3,7 +3,7 @@ package uz.pdp.food_recipe_app.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
+import uz.pdp.food_recipe_app.entity.base.TimeLong;
 
 @Getter
 @Setter
@@ -12,7 +12,7 @@ import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 @Builder
 @Entity
 @Table(name = "review_like")
-public class Like extends BaseTimeLong {
+public class Like extends TimeLong {
     @Column(nullable = false)
     private Boolean likeOrDislike;
 

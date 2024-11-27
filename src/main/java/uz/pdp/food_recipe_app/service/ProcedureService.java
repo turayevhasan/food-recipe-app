@@ -10,9 +10,10 @@ import uz.pdp.food_recipe_app.payload.base.ResBaseMsg;
 import uz.pdp.food_recipe_app.payload.procedure.req.ProcedureAddReq;
 import uz.pdp.food_recipe_app.payload.procedure.req.ProcedureUpdateReq;
 import uz.pdp.food_recipe_app.payload.procedure.res.ProcedureRes;
-import uz.pdp.food_recipe_app.repository.ProcedureMapper;
+import uz.pdp.food_recipe_app.mapper.ProcedureMapper;
 import uz.pdp.food_recipe_app.repository.ProcedureRepository;
 import uz.pdp.food_recipe_app.repository.RecipeRepository;
+import uz.pdp.food_recipe_app.util.GlobalVar;
 
 import java.util.List;
 
@@ -25,6 +26,10 @@ public class ProcedureService {
     public ResBaseMsg add(ProcedureAddReq req) {
         Recipe recipe = recipeRepository.findById(req.getRecipeId())
                 .orElseThrow(RestException.thew(ErrorTypeEnum.RECIPE_NOT_FOUND));
+
+        if (!GlobalVar.getUser().getId().equals(recipe.getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+        }
 
         Procedure procedure = new Procedure(req.getText(), recipe);
         procedureRepository.save(procedure); //saved
@@ -45,6 +50,10 @@ public class ProcedureService {
         Procedure procedure = procedureRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.PROCEDURE_NOT_FOUND));
 
+        if (!GlobalVar.getUser().getId().equals(procedure.getRecipe().getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+        }
+
         if (req.getText() != null) {
             procedure.setText(req.getText());
         }
@@ -54,6 +63,10 @@ public class ProcedureService {
 
             Procedure targetProcedure = procedureRepository.findById(req.getTargetProcedureId())
                     .orElseThrow(RestException.thew(ErrorTypeEnum.PROCEDURE_NOT_FOUND));
+
+            if (!GlobalVar.getUser().getId().equals(targetProcedure.getRecipe().getUser().getId())) {
+                throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+            }
 
             procedure.setText(targetProcedure.getText());
             targetProcedure.setText(text);
@@ -73,7 +86,14 @@ public class ProcedureService {
     }
 
     public ResBaseMsg delete(long id) {
-        procedureRepository.deleteById(id);//deleting
+        Procedure procedure = procedureRepository.findById(id)
+                .orElseThrow(RestException.thew(ErrorTypeEnum.PROCEDURE_NOT_FOUND));
+
+        if (!GlobalVar.getUser().getId().equals(procedure.getRecipe().getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+        }
+        procedureRepository.delete(procedure);//deleting
+
         return new ResBaseMsg("Procedure deleted!");
     }
 }

@@ -12,5 +12,5 @@ public class CategoryAddReq {
     @NotBlank
     private String name;
     @NotNull
-    private UUID photoId;
+    private String photoPath;
 }

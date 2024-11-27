@@ -22,18 +22,12 @@ public class SavedService {
     private final RecipeRepository recipeRepository;
 
     public ResBaseMsg add(Long recipeId) {
-        if (GlobalVar.getUser() == null) {
-            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
-        }
-
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.RECIPE_NOT_FOUND));
 
         Saved saved = new Saved(recipe, GlobalVar.getUser());
-
         savedRepository.save(saved);
-
-        return new ResBaseMsg("Recipe successfully saved!");
+        return new ResBaseMsg("Recipe saved!");
     }
 
 
@@ -41,17 +35,16 @@ public class SavedService {
         Saved saved = savedRepository.findById(savedId)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.SAVED_RECIPE_NOT_FOUND));
 
+        if (!GlobalVar.getUser().getId().equals(saved.getUser().getId()))
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+
         savedRepository.delete(saved);
 
-        return new ResBaseMsg("Recipe successfully deleted!");
+        return new ResBaseMsg("Recipe unsaved!");
     }
 
 
     public List<SavedRes> getAll() {
-        if (GlobalVar.getUser() == null) {
-            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
-        }
-
         return GlobalVar.getUser()
                 .getSavings()
                 .stream()

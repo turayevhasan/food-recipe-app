@@ -1,4 +1,4 @@
-package uz.pdp.food_recipe_app.repository;
+package uz.pdp.food_recipe_app.mapper;
 
 import uz.pdp.food_recipe_app.entity.Procedure;
 import uz.pdp.food_recipe_app.payload.procedure.res.ProcedureRes;

@@ -15,4 +15,5 @@ public interface BaseURI {
     String SAVED = "/saved";
     String VIDEO = "/video";
     String RATING = "/rating";
+    String LIKE = "/like";
 }

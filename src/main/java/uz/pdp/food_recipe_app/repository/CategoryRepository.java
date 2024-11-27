@@ -8,13 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uz.pdp.food_recipe_app.entity.Category;
 
-import java.util.Optional;
-
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByName(String name);
-
-    Optional<Category> findByName(String name);
 
     @Query("select c from Category c where (:name = '' or :name is null or lower(c.name) like lower(concat('%', :name, '%')))")
     Page<Category> findAllByFilters(

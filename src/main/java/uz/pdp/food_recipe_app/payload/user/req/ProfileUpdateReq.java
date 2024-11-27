@@ -9,5 +9,5 @@ public class ProfileUpdateReq {
     private String fullName;
     private String country;
     private String bio;
-    private UUID photoId;
+    private String photoPath;
 }

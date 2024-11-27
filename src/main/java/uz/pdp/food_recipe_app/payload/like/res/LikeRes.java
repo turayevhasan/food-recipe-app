@@ -19,7 +19,6 @@ import java.util.UUID;
 public class LikeRes {
     private Long id;
     private Boolean likeOrDislike;
-    private Long reviewId;
     private UUID userId;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)

@@ -26,7 +26,6 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final RecipeRepository recipeRepository;
 
-
     @Async
     public void addRecipeNotification(Recipe recipe) {
         //todo

@@ -2,7 +2,7 @@ package uz.pdp.food_recipe_app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import uz.pdp.food_recipe_app.entity.base.BaseTimeUUID;
+import uz.pdp.food_recipe_app.entity.base.TimeUUID;
 import uz.pdp.food_recipe_app.enums.UserStatus;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "auth_user")
-public class User extends BaseTimeUUID {
+public class User extends TimeUUID {
     @Column(nullable = false)
     private String fullName;
 
@@ -32,7 +32,7 @@ public class User extends BaseTimeUUID {
     @ManyToOne(optional = false)
     private Role role;
 
-    private UUID photoId;
+    private String photoPath;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

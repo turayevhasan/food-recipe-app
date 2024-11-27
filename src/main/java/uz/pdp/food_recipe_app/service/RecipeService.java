@@ -26,8 +26,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final CategoryRepository categoryRepository;
     private final AttachmentRepository attachmentRepository;
-    private final UserRepository userRepository;
-    private final FollowRepository followRepository;
+    private final AttachmentService attachmentService;
 
     public RecipeRes add(RecipeAddReq req) {
         Category category = categoryRepository.findById(req.getCategoryId())
@@ -35,9 +34,6 @@ public class RecipeService {
 
         if (!attachmentRepository.existsById(req.getVideoId()))
             throw RestException.restThrow(ErrorTypeEnum.VIDEO_NOT_FOUND);
-
-        if (GlobalVar.getUser() == null)
-            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
 
         Recipe recipe = Recipe.builder()
                 .name(req.getName())
@@ -54,6 +50,9 @@ public class RecipeService {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.RECIPE_NOT_FOUND));
 
+        if (!GlobalVar.getUser().getId().equals(recipe.getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+        }
         if (req.getCategoryId() != null) {
             Category category = categoryRepository.findById(req.getCategoryId())
                     .orElseThrow(RestException.thew(ErrorTypeEnum.CATEGORY_NOT_FOUND));
@@ -99,10 +98,8 @@ public class RecipeService {
         if (GlobalVar.getUser() == null)
             throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
 
-        User user = userRepository.findById(GlobalVar.getUser().getId())
-                .orElseThrow(RestException.thew(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED));
-
-        return user.getRecipes().stream()
+        return GlobalVar.getUser()
+                .getRecipes().stream()
                 .map(RecipeMapper::entityToRes)
                 .toList();
     }
@@ -111,7 +108,12 @@ public class RecipeService {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.RECIPE_NOT_FOUND));
 
-        recipe.setDeleted(true);
+        if (!GlobalVar.getUser().getId().equals(recipe.getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+        }
+
+        attachmentService.delete(recipe.getVideoId()); //deleting video from file and db
+        recipe.setDeleted(true); //set deleted true
         recipeRepository.save(recipe); //saved
 
         return new ResBaseMsg("Recipe deleted!");

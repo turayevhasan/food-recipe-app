@@ -52,6 +52,4 @@ public class CategoryController {
             @RequestParam(required = false) String name){
         return ApiResult.successResponse(categoryService.getAll(page, size, name));
     }
-
-
 }

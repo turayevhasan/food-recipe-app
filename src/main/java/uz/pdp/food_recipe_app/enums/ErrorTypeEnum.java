@@ -41,7 +41,9 @@ public enum ErrorTypeEnum {
     DUPLICATE_FOLLOWING(),
     FOLLOWING_NOT_FOUND(),
     FOLLOWER_NOT_FOUND(),
-    RATING_ALREADY_EXISTS();
+    RATING_ALREADY_EXISTS(),
+    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND),
+    ATTACHMENT_NOT_FOUND(HttpStatus.NOT_FOUND);
 
     private HttpStatus status = HttpStatus.BAD_REQUEST;
 

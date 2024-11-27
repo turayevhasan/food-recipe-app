@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
-import uz.pdp.food_recipe_app.entity.base.BaseTimeUUID;
+import uz.pdp.food_recipe_app.entity.base.BaseEntityUUID;
 import uz.pdp.food_recipe_app.util.BaseConstants;
 
 @Getter
@@ -14,7 +14,7 @@ import uz.pdp.food_recipe_app.util.BaseConstants;
 @Builder
 @Entity
 @Table(name = "attachment")
-public class Attachment extends BaseTimeUUID {
+public class Attachment extends BaseEntityUUID {
     @Column(nullable = false)
     private String originalName;
 

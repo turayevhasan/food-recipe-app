@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
+import uz.pdp.food_recipe_app.entity.base.TimeLong;
 
 
 @Getter
@@ -16,7 +16,7 @@ import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 @AllArgsConstructor
 @Entity
 @Table(name = "auth_role")
-public class Role extends BaseTimeLong {
+public class Role extends TimeLong {
     @Column(nullable = false, unique = true)
     private String name;
 }
