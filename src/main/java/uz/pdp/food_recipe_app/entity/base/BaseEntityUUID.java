@@ -18,7 +18,7 @@ import java.util.UUID;
 @MappedSuperclass
 @SuperBuilder
 @NoArgsConstructor
-public class BaseEntityUUID {
+public abstract class BaseEntityUUID {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
