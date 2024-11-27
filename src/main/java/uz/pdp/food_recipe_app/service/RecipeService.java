@@ -27,6 +27,7 @@ public class RecipeService {
     private final CategoryRepository categoryRepository;
     private final AttachmentRepository attachmentRepository;
     private final AttachmentService attachmentService;
+    private final NotificationService notificationService;
 
     public RecipeRes add(RecipeAddReq req) {
         Category category = categoryRepository.findById(req.getCategoryId())
@@ -43,6 +44,9 @@ public class RecipeService {
                 .build();
 
         recipeRepository.save(recipe); //saving
+
+        notificationService.addRecipeNotification(recipe);
+
         return RecipeMapper.entityToRes(recipe);
     }
 

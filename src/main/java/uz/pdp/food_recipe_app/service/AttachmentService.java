@@ -65,6 +65,7 @@ public class AttachmentService {
         }
     }
 
+    @Transactional
     public ResBaseMsg delete(UUID id) {
         Attachment attachment = attachmentRepository.findById(id)
                 .orElseThrow(() -> RestException.restThrow(FILE_NOT_FOUND));

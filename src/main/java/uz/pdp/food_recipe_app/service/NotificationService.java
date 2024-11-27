@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.entity.Following;
 import uz.pdp.food_recipe_app.entity.Notification;
 import uz.pdp.food_recipe_app.entity.Recipe;
 import uz.pdp.food_recipe_app.entity.User;
@@ -12,12 +13,13 @@ import uz.pdp.food_recipe_app.exceptions.RestException;
 import uz.pdp.food_recipe_app.mapper.NotificationMapper;
 import uz.pdp.food_recipe_app.payload.notification.req.NotificationUpdateReq;
 import uz.pdp.food_recipe_app.payload.notification.res.NotificationRes;
+import uz.pdp.food_recipe_app.repository.FollowRepository;
 import uz.pdp.food_recipe_app.repository.NotificationRepository;
 import uz.pdp.food_recipe_app.repository.RecipeRepository;
 import uz.pdp.food_recipe_app.util.GlobalVar;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,19 +27,24 @@ import java.util.UUID;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final RecipeRepository recipeRepository;
+    private final FollowRepository followRepository;
 
     @Async
     public void addRecipeNotification(Recipe recipe) {
-        //todo
-        Notification notification = Notification.builder()
-                .title("New Recipe Alert!")
-                .text(recipe.getName())
-                .recipeId(recipe.getId())
-                .read(false)
-                .user(null)
-                .build();
-
-        notificationRepository.save(notification);
+        List<Following> allByUserId = followRepository.findAllByFollowingId(recipe.getUser().getId());
+        List<Notification> notifications = new ArrayList<>();
+        for (Following following : allByUserId) {
+            notifications.add(
+                    Notification.builder()
+                            .title("New Recipe Alert!")
+                            .text(recipe.getName())
+                            .recipeId(recipe.getId())
+                            .read(false)
+                            .user(following.getUser())
+                            .build()
+            );
+        }
+        notificationRepository.saveAll(notifications);
     }
 
     public NotificationRes update(long id, NotificationUpdateReq req) {
@@ -47,7 +54,6 @@ public class NotificationService {
         if (req.getRecipeId() != null) {
             if (!recipeRepository.existsById(req.getRecipeId()))
                 throw RestException.restThrow(ErrorTypeEnum.RECIPE_NOT_FOUND);
-
             notification.setRecipeId(req.getRecipeId());
         }
 
@@ -65,11 +71,7 @@ public class NotificationService {
     }
 
     public List<NotificationRes> getAll(Boolean read) {
-        if (GlobalVar.getUser() == null)
-            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
-
         User user = GlobalVar.getUser();
-
         List<Notification> all;
         if (read == null) {
             all = notificationRepository.findAllByUser(user);
