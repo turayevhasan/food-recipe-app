@@ -11,10 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
-
-    Optional<Rating> findByRecipeId(Long id);
-    Boolean existsByRecipeId(Long id);
-
     List<Rating> findAllByRecipeId(Long recipeId);
 
     boolean existsByUserIdAndRecipeId(UUID id, Long recipeId);

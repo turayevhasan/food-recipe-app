@@ -15,35 +15,42 @@ import uz.pdp.food_recipe_app.payload.ingredient.req.IngredientAddReq;
 import uz.pdp.food_recipe_app.repository.AttachmentRepository;
 import uz.pdp.food_recipe_app.repository.IngredientRepository;
 import uz.pdp.food_recipe_app.repository.RecipeRepository;
+import uz.pdp.food_recipe_app.util.GlobalVar;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+
+import static uz.pdp.food_recipe_app.util.CoreUtils.getIfExists;
 
 @Service
 @RequiredArgsConstructor
 public class IngredientService {
     private final IngredientRepository ingredientRepository;
-    private final AttachmentRepository attachmentRepository;
     private final RecipeRepository recipeRepository;
     private final AttachmentService attachmentService;
 
-
     public IngredientRes add(IngredientAddReq req) {
-        Attachment photo = attachmentRepository.findById(req.getPhotoId())
-                .orElseThrow(RestException.thew(ErrorTypeEnum.FILE_NOT_FOUND));
-
         Recipe recipe = recipeRepository.findById(req.getRecipeId())
                 .orElseThrow(RestException.thew(ErrorTypeEnum.RECIPE_NOT_FOUND));
 
+        if (!GlobalVar.getUser().getId().equals(recipe.getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+        }
+
+        if (!Files.exists(Path.of(req.getPhotoPath()))) {
+            throw RestException.restThrow(ErrorTypeEnum.FILE_NOT_FOUND);
+        }
+
         Ingredient ingredient = Ingredient.builder()
                 .name(req.getName())
-                .photoId(req.getPhotoId())
+                .photoPath(req.getPhotoPath())
                 .weight(req.getWeight())
                 .recipe(recipe)
                 .build();
 
         ingredientRepository.save(ingredient); //saved
-
-        return IngredientMapper.entityToRes(ingredient, photo.getFilePath());
+        return IngredientMapper.entityToRes(ingredient);
     }
 
 
@@ -51,30 +58,33 @@ public class IngredientService {
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.INGREDIENT_NOT_FOUND));
 
-        String photoPath;
-        if (req.getPhotoId() != null)
-            photoPath = attachmentRepository.findById(req.getPhotoId())
-                    .orElseThrow(RestException.thew(ErrorTypeEnum.FILE_NOT_FOUND))
-                    .getFilePath();
-        else
-            photoPath = attachmentRepository.findById(ingredient.getPhotoId())
-                    .orElseThrow(RestException.thew(ErrorTypeEnum.FILE_NOT_FOUND))
-                    .getFilePath();
+        if (!GlobalVar.getUser().getId().equals(ingredient.getRecipe().getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+        }
 
-        if (req.getWeight() != null)
-            ingredient.setWeight(req.getWeight());
+        if (req.getPhotoPath() != null) {
+            if (!Files.exists(Path.of(req.getPhotoPath()))) {
+                throw RestException.restThrow(ErrorTypeEnum.FILE_NOT_FOUND);
+            }
+            ingredient.setPhotoPath(req.getPhotoPath());
+        }
 
-        if (req.getName() != null)
-            ingredient.setName(req.getName());
+        ingredient.setWeight(getIfExists(req.getWeight(), ingredient.getWeight()));
+        ingredient.setName(getIfExists(req.getName(), ingredient.getName()));
 
-        return IngredientMapper.entityToRes(ingredient, photoPath);
+        ingredientRepository.save(ingredient);  //updated
+        return IngredientMapper.entityToRes(ingredient);
     }
 
     public ResBaseMsg delete(long id) {
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.INGREDIENT_NOT_FOUND));
 
-        attachmentService.delete(ingredient.getPhotoId()); //deleting photo from file and db
+        if (!GlobalVar.getUser().getId().equals(ingredient.getRecipe().getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+        }
+
+        attachmentService.deleteByPath(ingredient.getPhotoPath()); //deleting photo from file and db
         ingredientRepository.delete(ingredient); //deleting
 
         return new ResBaseMsg("Ingredient deleted");
@@ -85,11 +95,7 @@ public class IngredientService {
                 .orElseThrow(RestException.thew(ErrorTypeEnum.RECIPE_NOT_FOUND));
 
         return recipe.getIngredients().stream()
-                .map(ingredient -> {
-                    Attachment photo = attachmentRepository.findById(ingredient.getPhotoId())
-                            .orElseThrow(RestException.thew(ErrorTypeEnum.FILE_NOT_FOUND));
-                    return IngredientMapper.entityToRes(ingredient, photo.getFilePath());
-                })
+                .map(IngredientMapper::entityToRes)
                 .toList();
     }
 }

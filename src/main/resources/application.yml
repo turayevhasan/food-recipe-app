@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/recipe_app
-    username: postgres
-    password:
+    url: jdbc:postgresql://8.210.211.217:5432/food_recipe_app
+    username: g38
+    password: YkwrJ5D2X
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

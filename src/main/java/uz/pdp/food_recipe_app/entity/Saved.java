@@ -5,7 +5,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.*;
-import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
+import uz.pdp.food_recipe_app.entity.base.TimeLong;
 
 @Getter
 @Setter
@@ -14,7 +14,7 @@ import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
 @Builder
 @Entity
 @Table(name = "saved")
-public class Saved extends BaseTimeLong {
+public class Saved extends TimeLong {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Recipe recipe;
 

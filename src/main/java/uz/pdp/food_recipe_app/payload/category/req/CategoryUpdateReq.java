@@ -7,5 +7,5 @@ import java.util.UUID;
 @Data
 public class CategoryUpdateReq {
     private String name;
-    private UUID photoId;
+    private String photoPath;
 }

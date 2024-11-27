@@ -7,6 +7,6 @@ import java.util.UUID;
 @Data
 public class IngredientUpdateReq {
     private String name;
-    private UUID photoId;
+    private String photoPath;
     private Double weight;
 }

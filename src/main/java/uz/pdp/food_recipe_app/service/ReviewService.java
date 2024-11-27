@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static uz.pdp.food_recipe_app.util.CoreUtils.getIfExists;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -28,7 +30,6 @@ public class ReviewService {
         if (GlobalVar.getUser() == null) {
             throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
         }
-
         Recipe recipe = recipeRepository.findById(reviewAddReq.getRecipeId())
                 .orElseThrow(RestException.thew(ErrorTypeEnum.RECIPE_NOT_FOUND));
 
@@ -40,17 +41,18 @@ public class ReviewService {
 
         reviewRepository.save(review);
 
-        return new ResBaseMsg("Review successfully sent!");
+        return new ResBaseMsg("Review sent!");
     }
 
     public ReviewRes update(Long id, String text) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.REVIEW_NOT_FOUND));
 
-        if (text != null) {
-            review.setText(text);
+        if (!GlobalVar.getUser().getId().equals(review.getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
         }
 
+        review.setText(getIfExists(text, review.getText()));
         reviewRepository.save(review);
 
         return ReviewMapper.entityToDto(review);
@@ -60,10 +62,13 @@ public class ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.REVIEW_NOT_FOUND));
 
+        if (!GlobalVar.getUser().getId().equals(review.getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.FORBIDDEN);
+        }
         review.setDeleted(true);
         reviewRepository.save(review);
 
-        return new ResBaseMsg("Review successfully deleted!");
+        return new ResBaseMsg("Review deleted!");
     }
 
     public List<ReviewRes> getAllReviews(Long recipeId) {

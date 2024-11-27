@@ -40,7 +40,7 @@ public class FollowService {
         }
         Following following = new Following(user, followingUser);
         followRepository.save(following);
-        return new ResBaseMsg("successfully added following user");
+        return new ResBaseMsg("Successfully following to user");
     }
 
     public List<UserRes> getAllFollowings() {
@@ -50,7 +50,7 @@ public class FollowService {
         List<UserRes> userResList = new ArrayList<>();
 
         for (Following following : allByUserId) {
-            userResList.add(UserMapper.entityToRes(following.getFollowing(),getPhotoPath(user)));
+            userResList.add(UserMapper.entityToRes(following.getFollowing()));
         }
         return userResList;
     }
@@ -62,7 +62,7 @@ public class FollowService {
         List<UserRes> userResList = new ArrayList<>();
 
         for (Following following : allByUserId) {
-            userResList.add(UserMapper.entityToRes(following.getUser(),getPhotoPath(user)));
+            userResList.add(UserMapper.entityToRes(following.getUser()));
         }
         return userResList;
     }
@@ -73,24 +73,15 @@ public class FollowService {
         Following following = followRepository.findByUserIdAndFollowingId(user.getId(), id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.FOLLOWING_NOT_FOUND));
         followRepository.deleteById(following.getId());
-        return new ResBaseMsg("successfully deleted following user");
+        return new ResBaseMsg("Successfully unfollowing from user");
     }
+
     @Transactional
     public ResBaseMsg deleteFollower(UUID id) {
         User user = GlobalVar.getUser();
-        Following following = followRepository.findByUserIdAndFollowingId(id,user.getId())
+        Following following = followRepository.findByUserIdAndFollowingId(id, user.getId())
                 .orElseThrow(RestException.thew(ErrorTypeEnum.FOLLOWER_NOT_FOUND));
         followRepository.deleteById(following.getId());
-        return new ResBaseMsg("Successfully deleted following user");
-    }
-
-    private String getPhotoPath(User user) {
-        if (user.getPhotoId() == null)
-            return null;
-
-        return attachmentRepository
-                .findById(user.getPhotoId())
-                .map(Attachment::getFilePath)
-                .orElse(null);
+        return new ResBaseMsg("Successfully delete follower");
     }
 }

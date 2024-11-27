@@ -12,7 +12,7 @@ public class IngredientAddReq {
     private String name;
 
     @NotNull
-    private UUID photoId;
+    private String photoPath;
 
     @NotNull
     private Double weight;

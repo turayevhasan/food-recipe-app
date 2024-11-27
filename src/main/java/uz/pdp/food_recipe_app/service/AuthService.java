@@ -128,17 +128,8 @@ public class AuthService {
     }
 
     private SignInRes generateSignInRes(User user) {
-        UserRes userRes = UserMapper.entityToRes(user, getPhotoPath(user));
+        UserRes userRes = UserMapper.entityToRes(user);
         return new SignInRes(userRes, generateTokens(user));
-    }
-    private String getPhotoPath(User user) {
-        if (user.getPhotoId() == null)
-            return null;
-
-        return attachmentRepository
-                .findById(user.getPhotoId())
-                .map(Attachment::getFilePath)
-                .orElse(null);
     }
 
     private TokenDto generateTokens(User user) {

@@ -8,12 +8,12 @@ import uz.pdp.food_recipe_app.util.GlobalVar;
 import static uz.pdp.food_recipe_app.util.CoreUtils.getIfExists;
 
 public interface UserMapper {
-    static UserRes entityToRes(User user, String path) {
+    static UserRes entityToRes(User user) {
         return UserRes.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .role(user.getRole().getName())
-                .photoPath(path)
+                .photoPath(user.getPhotoPath())
                 .country(user.getCountry())
                 .active(user.isActive())
                 .deleted(user.isDeleted())

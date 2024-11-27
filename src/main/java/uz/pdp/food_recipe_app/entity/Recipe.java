@@ -2,7 +2,7 @@ package uz.pdp.food_recipe_app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import uz.pdp.food_recipe_app.entity.base.BaseTimeLong;
+import uz.pdp.food_recipe_app.entity.base.TimeLong;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "recipe")
-public class Recipe extends BaseTimeLong {
+public class Recipe extends TimeLong {
     @Column(nullable = false)
     private String name;
 

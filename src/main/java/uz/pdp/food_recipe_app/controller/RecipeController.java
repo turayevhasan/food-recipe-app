@@ -39,7 +39,6 @@ public class RecipeController {
         return ApiResult.successResponse(recipeService.getOne(id));
     }
 
-
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{id}")
     public ApiResult<ResBaseMsg> deleteRecipe(@PathVariable("id") long id){

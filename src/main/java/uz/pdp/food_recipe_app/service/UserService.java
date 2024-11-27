@@ -17,6 +17,9 @@ import uz.pdp.food_recipe_app.repository.AttachmentRepository;
 import uz.pdp.food_recipe_app.repository.UserRepository;
 import uz.pdp.food_recipe_app.util.GlobalVar;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -24,7 +27,6 @@ public class UserService {
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
     private final CodeService codeService;
-    private final AttachmentRepository attachmentRepository;
 
     public ResBaseMsg forgotPassword(String email) {
         User user = userRepository.findByEmail(email)
@@ -42,9 +44,6 @@ public class UserService {
 
     public ResBaseMsg changePassword(UpdatePasswordReq req) {
         User user = GlobalVar.getUser();
-
-        if (user == null)
-            throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
 
         if (!req.getNewPassword().equals(req.getConfirmNewPassword()))
             throw RestException.restThrow(ErrorTypeEnum.CONFIRM_PASSWORD_NOT_MATCH);
@@ -78,19 +77,15 @@ public class UserService {
             throw RestException.restThrow(ErrorTypeEnum.USER_NOT_FOUND_OR_DISABLED);
 
         User user = GlobalVar.getUser();
+
+        if (req.getPhotoPath() != null) {
+            if (!Files.exists(Path.of(req.getPhotoPath())))
+                throw RestException.restThrow(ErrorTypeEnum.FILE_NOT_FOUND);
+            user.setPhotoPath(req.getPhotoPath());
+        }
         UserMapper.update(user, req); //updating
         userRepository.save(user); //saved
 
-        return UserMapper.entityToRes(user, getPhotoPath(user));
-    }
-
-    private String getPhotoPath(User user) {
-        if (user.getPhotoId() == null)
-            return null;
-
-        return attachmentRepository
-                .findById(user.getPhotoId())
-                .map(Attachment::getFilePath)
-                .orElse(null);
+        return UserMapper.entityToRes(user);
     }
 }
