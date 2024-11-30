@@ -27,7 +27,7 @@ public class MyAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex) throws IOException {
         log.error("Responding with 403 forbidden error. URL -  {}, Message - {}", request.getRequestURI(), ex.getMessage());
 
-        ApiResult<ErrorResponse> errorDataApiResult = ApiResult.errorResponse("forbidden", 403);
+        ApiResult<ErrorResponse> errorDataApiResult = ApiResult.errorResponse("Forbidden", 403);
         response.getWriter().write(objectMapper.writeValueAsString(errorDataApiResult));
 
         response.setStatus(403);

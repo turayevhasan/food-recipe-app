@@ -31,11 +31,7 @@ public class CategoryService {
         if (categoryRepository.existsByName(req.getName()))
             throw RestException.restThrow(ErrorTypeEnum.CATEGORY_ALREADY_EXISTS);
 
-        if (!Files.exists(Path.of(req.getPhotoPath()))) {
-            throw RestException.restThrow(ErrorTypeEnum.FILE_NOT_FOUND);
-        }
-
-        Category category = new Category(req.getName(), req.getPhotoPath());
+        Category category = new Category(req.getName());
         categoryRepository.save(category);  //saving
 
         return CategoryMapper.entityToDto(category);
@@ -50,13 +46,6 @@ public class CategoryService {
             throw RestException.restThrow(ErrorTypeEnum.CATEGORY_ALREADY_EXISTS);
 
         category.setName(getIfExists(req.getName(), category.getName()));
-
-        if (req.getPhotoPath() != null) {
-            if (!Files.exists(Path.of(req.getPhotoPath()))) {
-                throw RestException.restThrow(ErrorTypeEnum.FILE_NOT_FOUND);
-            }
-            category.setPhotoPath(req.getPhotoPath());
-        }
 
         categoryRepository.save(category); //updating
         return CategoryMapper.entityToDto(category);

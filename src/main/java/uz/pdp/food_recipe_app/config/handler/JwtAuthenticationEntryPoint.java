@@ -25,7 +25,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) throws IOException, ServletException {
         log.error("Responding with 401 unauthorized error. URL -  {}, Message - {}", request.getRequestURI(), ex.getMessage());
 
-        ApiResult<ErrorResponse> errorDataApiResult = ApiResult.errorResponse("unauthorized", 401);
+        ApiResult<ErrorResponse> errorDataApiResult = ApiResult.errorResponse("Unauthorized", 401);
         response.getWriter().write(jacksonObjectMapper.writeValueAsString(errorDataApiResult));
 
         response.setStatus(401);

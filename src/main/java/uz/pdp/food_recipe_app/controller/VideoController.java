@@ -27,7 +27,6 @@ import java.util.UUID;
 public class VideoController {
     private final AttachmentRepository attachmentRepository;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/play/{videoId}")
     public ResponseEntity<Resource> playVideo(
             @PathVariable UUID videoId,

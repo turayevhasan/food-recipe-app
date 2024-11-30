@@ -20,9 +20,7 @@ public interface AttachmentMapper {
     static FileRes fromEntityToResDto(Attachment attachment) {
         return new FileRes(
                 attachment.getId(),
-                attachment.getFilePath(),
-                attachment.getCreatedAt(),
-                attachment.getUpdatedAt()
+                attachment.getFilePath()
         );
     }
 }

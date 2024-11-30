@@ -43,4 +43,10 @@ public class UserController {
         return ApiResult.successResponse(userService.update(req));
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/get-me")
+    public ApiResult<UserRes> getMe() {
+        return ApiResult.successResponse(userService.getMe());
+    }
+
 }

@@ -67,6 +67,14 @@ public class NotificationService {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(RestException.thew(ErrorTypeEnum.NOTIFICATION_NOT_FOUND));
 
+        if (!notification.getUser().getId().equals(GlobalVar.getUser().getId())) {
+            throw RestException.restThrow(ErrorTypeEnum.NOTIFICATION_NOT_FOUND);
+        }
+
+        if (notification.getRead().equals(Boolean.FALSE)) {
+            notification.setRead(Boolean.TRUE);
+            notificationRepository.save(notification); //updated
+        }
         return NotificationMapper.fromEntityToDto(notification);
     }
 

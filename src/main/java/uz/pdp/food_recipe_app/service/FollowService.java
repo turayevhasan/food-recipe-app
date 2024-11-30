@@ -26,7 +26,6 @@ public class FollowService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-    private final AttachmentRepository attachmentRepository;
 
     public ResBaseMsg following(UUID id) {
         User user = GlobalVar.getUser();

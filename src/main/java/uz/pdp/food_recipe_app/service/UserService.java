@@ -88,4 +88,8 @@ public class UserService {
 
         return UserMapper.entityToRes(user);
     }
+
+    public UserRes getMe() {
+        return UserMapper.entityToRes(GlobalVar.getUser());
+    }
 }

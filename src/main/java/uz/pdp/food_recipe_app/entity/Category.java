@@ -14,5 +14,4 @@ import uz.pdp.food_recipe_app.entity.base.TimeLong;
 public class Category extends TimeLong {
     @Column(unique = true, nullable = false)
     private String name;
-    private String photoPath;
 }
