@@ -1,4 +1,4 @@
-# Lock Market
+# Food Recipe App
 
 ## Description
 This is Rest Api project based on Spring Boot 3.3.5v
