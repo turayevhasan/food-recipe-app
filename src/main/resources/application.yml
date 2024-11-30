@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://8.210.211.217:5432/food_recipe_app
-    username: g38
-    password: YkwrJ5D2X
+    url: jdbc:postgresql://localhost:5432/food_recipe_app
+    username: postgres
+    password: password
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -19,8 +19,8 @@ spring:
   mail:
     host: 'smtp.gmail.com'
     port: 587
-    username: 'turayevhasan2003@gmail.com'
-    password: 'tiii chrr wrtz tnak'
+    username: 'your_app_email'
+    password: 'your_app_password'
     properties:
       mail:
         smtp:
